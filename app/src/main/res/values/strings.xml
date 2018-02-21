@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Ucznik</string>
+
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Hasło</string>
+    <string name="register_hint">Nie masz konta? <u>Zarejestruj się</u></string>
+    <string name="login_button">Zaloguj</string>
+    <string name="register">Rejestracja</string>
+    <string name="empty_email_error">Email jest pusty</string>
+    <string name="not_email_error">Nieporawny adres email</string>
+    <string name="empty_password_error">Hasło jest puste</string>
+    <string name="hint_password_repeat">Powtórz hasło</string>
+    <string name="logo_desc">Logo aplikacji</string>
+    <string name="register_btn">Zarejestruj</string>
+    <string name="passwords_not_match_error">Podane hasła się różnią</string>
+</resources>

@@ -1,4 +1,4 @@
-package com.ucznik
+package com.ucznik.view
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -6,7 +6,9 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import com.ucznik.presenter.LoginPresenter
 import com.ucznik.ucznik.R
+import com.ucznik.view.interfaces.ILoginView
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity(), ILoginView {
@@ -17,6 +19,7 @@ class LoginActivity : AppCompatActivity(), ILoginView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        loginPresenter.checkIfLoggedIn()
         initListeners()
         setKeyboardListener()
     }

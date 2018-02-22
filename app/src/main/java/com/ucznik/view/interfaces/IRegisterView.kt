@@ -1,13 +1,13 @@
-package com.ucznik
+package com.ucznik.view.interfaces
 
 /**
  * Created by Mateusz on 21.02.2018.
  */
-interface ILoginView {
-
+interface IRegisterView {
     fun showProgress(show: Boolean)
     fun onEmailError(error: String)
     fun onPasswordError(error: String)
-    fun onLoginError(error: String)
+    fun onPasswordRepeatError(error: String)
+    fun onRegisterError(error: String)
     fun clearErrors()
 }

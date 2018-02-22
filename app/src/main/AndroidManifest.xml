@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.ucznik.LoginActivity"
+        <activity
+            android:name="com.ucznik.view.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,14 +22,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.ucznik.RegisterActivity"
+        <activity
+            android:name="com.ucznik.view.RegisterActivity"
+            android:label="@string/register"
+            android:parentActivityName="com.ucznik.view.LoginActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName="com.ucznik.LoginActivity"
-            android:theme="@style/AppThemeActionBar"
-            android:label="@string/register">
+            android:theme="@style/AppThemeActionBar"/>
 
-        </activity>
+        <activity android:name="com.ucznik.view.TopicsActivity"
+            android:theme="@style/AppThemeActionBar"
+            android:label="@string/topics"/>
     </application>
 
 </manifest>

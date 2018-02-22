@@ -1,8 +1,9 @@
-package com.ucznik
+package com.ucznik.presenter
 
 import android.content.Context
 import android.text.TextUtils
 import com.ucznik.ucznik.R
+import com.ucznik.view.interfaces.IRegisterView
 
 /**
  * Created by Mateusz on 21.02.2018.

@@ -1,15 +1,17 @@
-package com.ucznik
+package com.ucznik.view
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import com.ucznik.presenter.RegisterPresenter
 import com.ucznik.ucznik.R
+import com.ucznik.view.interfaces.IRegisterView
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : AppCompatActivity(), IRegisterView {
 
-    private val registerPresenter = RegisterPresenter(this,this)
+    private val registerPresenter = RegisterPresenter(this, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +39,7 @@ class RegisterActivity : AppCompatActivity(), IRegisterView {
     }
 
     override fun onRegisterError(error: String) {
-        registerError?.error = error
+        registerError?.text = error
     }
 
     override fun clearErrors() {

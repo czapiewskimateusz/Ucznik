@@ -24,4 +24,7 @@
     <string name="mark_done">Oznacz jako wykonane</string>
     <string name="mark_undone">Oznacz jako niewykonane</string>
     <string name="topic_options_desc">Opcje tematu</string>
+    <string name="save">zapisz</string>
+    <string name="cancel">anuluj</string>
+    <string name="new_topic">Nowy temat</string>
 </resources>

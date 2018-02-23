@@ -1,5 +1,6 @@
 package com.ucznik.presenter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
@@ -23,6 +24,7 @@ class LoginPresenter(private val view: ILoginView, private val context: Context)
         }
     }
 
+    @SuppressLint("CommitPrefEdits")
     private fun saveUsersId(id: Int) {
         val sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
@@ -65,6 +67,7 @@ class LoginPresenter(private val view: ILoginView, private val context: Context)
 
     private fun startTopicsActivity() {
         val intent = Intent(context, TopicsActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         context.startActivity(intent)
     }
 

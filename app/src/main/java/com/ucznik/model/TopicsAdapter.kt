@@ -1,6 +1,9 @@
 package com.ucznik.model
 
+import android.app.Activity
+import android.app.FragmentManager
 import android.content.Context
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +15,13 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import com.ucznik.ucznik.R
+import com.ucznik.view.RenameDialog
 import kotlinx.android.synthetic.main.topic_item.view.*
 
 /**
  * Created by Mateusz on 22.02.2018.
  */
-class TopicsAdapter(private var topics: ArrayList<Topic>, private val context: Context): RecyclerView.Adapter<TopicsAdapter.TopicViewHolder>() {
+class TopicsAdapter(private var topics: ArrayList<Topic>, private val context: Context,private val activity: FragmentActivity): RecyclerView.Adapter<TopicsAdapter.TopicViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TopicViewHolder {
         val v = LayoutInflater.from(parent?.context).inflate(R.layout.topic_item, parent, false)
@@ -65,7 +69,7 @@ class TopicsAdapter(private var topics: ArrayList<Topic>, private val context: C
                     return@setOnMenuItemClickListener true
                 }
                 R.id.rename_topic -> {
-                    Toast.makeText(context, "Zmien nazwe ${topics[position].name}", Toast.LENGTH_SHORT).show()
+                    renameTopic(position)
                     return@setOnMenuItemClickListener true
                 }
                 R.id.mark_done -> {
@@ -79,6 +83,14 @@ class TopicsAdapter(private var topics: ArrayList<Topic>, private val context: C
                 else -> return@setOnMenuItemClickListener false
             }
         })
+    }
+
+    private fun renameTopic(position: Int) {
+        val renameDialog = RenameDialog()
+        renameDialog.currName = topics[position].name
+        renameDialog.position = position
+       // renameDialog.onAttach(context)
+        renameDialog.show(activity.fragmentManager, "rename_dialog")
     }
 
     private fun markUndone(position: Int) {

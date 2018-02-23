@@ -27,11 +27,15 @@
             android:label="@string/register"
             android:parentActivityName="com.ucznik.view.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeActionBar"/>
+            android:theme="@style/AppThemeActionBar" />
+        <activity
+            android:name="com.ucznik.view.TopicsActivity"
+            android:label="@string/topics"
+            android:theme="@style/AppThemeActionBar" />
 
-        <activity android:name="com.ucznik.view.TopicsActivity"
-            android:theme="@style/AppThemeActionBar"
-            android:label="@string/topics"/>
+        <activity
+            android:name="com.ucznik.view.TopicDetailActivity"
+            android:theme="@style/AppThemeActionBar" />
     </application>
 
 </manifest>

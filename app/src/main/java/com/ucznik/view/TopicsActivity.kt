@@ -2,14 +2,14 @@ package com.ucznik.view
 
 import android.os.Bundle
 import android.os.Handler
-import android.support.design.widget.Snackbar
-import android.support.v4.app.FragmentActivity
+
 import android.support.v7.app.AppCompatActivity
 
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.ucznik.model.Topic
 import com.ucznik.model.TopicsAdapter
 import com.ucznik.presenter.TopicsPresenter
@@ -77,12 +77,19 @@ class TopicsActivity : AppCompatActivity(), RenameDialog.RenameDialogListener, I
 
     private fun addOnScrollListener() {
         topicsRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-                when (newState) {
-                    RecyclerView.SCROLL_STATE_IDLE -> topicsFAB.show()
-                    else -> topicsFAB.hide()
-                }
-                super.onScrollStateChanged(recyclerView, newState)
+
+//            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+//                super.onScrollStateChanged(recyclerView, newState)
+//                when(newState){
+//                    RecyclerView.SCROLL_STATE_IDLE -> topicsFAB.show()
+//                    RecyclerView.SCROLL_STATE_DRAGGING -> topicsFAB.hide()
+//                }
+//            }
+
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0 && topicsFAB.visibility == View.VISIBLE) topicsFAB.hide()
+                else if (dy < 0 && topicsFAB.visibility != View.VISIBLE) topicsFAB.show()
             }
         })
     }

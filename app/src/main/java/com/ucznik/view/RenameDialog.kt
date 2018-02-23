@@ -31,9 +31,10 @@ class RenameDialog: DialogFragment() {
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(activity)
         val inflater = activity.layoutInflater
         val view = inflater.inflate(R.layout.dialog_topic_rename,null)
+
+        val builder = AlertDialog.Builder(activity)
         builder.setTitle(currName ?: getString(R.string.new_topic))
                 .setView(view)
                 .setPositiveButton(getString(R.string.save)) { _, _ ->

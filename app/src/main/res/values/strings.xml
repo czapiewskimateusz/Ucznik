@@ -20,11 +20,17 @@
     <string name="logout_menu">Wyloguj</string>
     <string name="like_an_ico"><![CDATA[&#8942;]]></string>
     <string name="delete_topic">Usuń</string>
-    <string name="rename_topic">Zmień nazwę</string>
+    <string name="rename_topic">Nazwa</string>
     <string name="mark_done">Oznacz jako wykonane</string>
     <string name="mark_undone">Oznacz jako niewykonane</string>
     <string name="topic_options_desc">Opcje tematu</string>
     <string name="save">zapisz</string>
     <string name="cancel">anuluj</string>
     <string name="new_topic">Nowy temat</string>
+    <string name="learn_menu">Ucz się!</string>
+    <string name="search_question_menu">Szukaj</string>
+    <string name="question_done_mark_desc">Oznaczenie zakończenia pytania</string>
+    <string name="questions_done">NAUCZONO</string>
+    <string name="deleted">Usunięto</string>
+    <string name="rename">Zmień nazwę</string>
 </resources>

@@ -11,4 +11,7 @@
     <color name="divider">#BDBDBD</color>
 
     <color name="topic_background">#000000</color>
+    <color name="red">#D32F2F</color>
+    <color name="yellow">#fbc02d</color>
+    <color name="green">#388E3C</color>
 </resources>

@@ -1,4 +1,4 @@
-package com.ucznik.model
+package com.ucznik.presenter.adapters
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.ucznik.model.entities.Question
 import com.ucznik.ucznik.R
 import kotlinx.android.synthetic.main.question_item.view.*
 
@@ -42,7 +43,7 @@ class QuestionsAdapter(private var questions: ArrayList<Question>,
      * Sets a DONE mark based on topics done parameter
      */
     private fun setDoneMark(position: Int, holder: QuestionViewHolder?) {
-        if (questions[position].done) holder?.questionDoneIV?.setImageDrawable(context.getDrawable(R.drawable.ic_done))
+        if (questions[position].done==1) holder?.questionDoneIV?.setImageDrawable(context.getDrawable(R.drawable.ic_done))
         else holder?.questionDoneIV?.setImageDrawable(context.getDrawable(R.drawable.ic_done_empty))
     }
 
@@ -53,7 +54,7 @@ class QuestionsAdapter(private var questions: ArrayList<Question>,
 
         init {
             questionDoneIV.setOnClickListener( {
-                if (questions[position!!].done) {
+                if (questions[position!!].done==1) {
                     markUndone()
                 } else {
                     markDone()
@@ -68,13 +69,13 @@ class QuestionsAdapter(private var questions: ArrayList<Question>,
 
         private fun markUndone() {
             questionDoneIV.setImageDrawable(context.getDrawable(R.drawable.ic_done_empty))
-            questions[position!!].done = false
+            questions[position!!].done = 0
             markedDoneListener.markedUndone()
         }
 
         private fun markDone() {
             questionDoneIV.setImageDrawable(context.getDrawable(R.drawable.ic_done))
-            questions[position!!].done = true
+            questions[position!!].done = 1
             markedDoneListener.markedDone()
         }
 

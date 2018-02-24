@@ -7,8 +7,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.View
-import com.ucznik.model.Question
-import com.ucznik.model.QuestionsAdapter
+import com.ucznik.model.entities.Question
+import com.ucznik.presenter.adapters.QuestionsAdapter
 import com.ucznik.ucznik.R
 import kotlinx.android.synthetic.main.activity_topic_detail.*
 
@@ -27,7 +27,7 @@ class TopicDetailActivity : AppCompatActivity(), QuestionsAdapter.MarkedDoneList
 
     private fun changeStatus() {
         var done = 0.0
-        questions.forEach { q -> if (q.done) done++ }
+        questions.forEach { q -> if (q.done==1) done++ }
         val percentage: Double = (done / questions.size) * 100
         questionStatusTV.text = String.format("%.2f", percentage) + "%"
         if (percentage<50.0) {

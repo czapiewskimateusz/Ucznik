@@ -10,8 +10,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.ucznik.model.Topic
-import com.ucznik.model.TopicsAdapter
+import com.ucznik.model.entities.Topic
+import com.ucznik.presenter.adapters.TopicsAdapter
 import com.ucznik.presenter.TopicsPresenter
 import com.ucznik.ucznik.R
 import com.ucznik.view.interfaces.ITopicsView
@@ -19,9 +19,7 @@ import kotlinx.android.synthetic.main.activity_topics.*
 
 class TopicsActivity : AppCompatActivity(), RenameDialog.RenameDialogListener, ITopicsView {
 
-    private val topicPresenter = TopicsPresenter(this, this)
-    private var topics = Topic.getSampleData()
-    private var topicsAdapter: TopicsAdapter? = null
+    private val topicPresenter = TopicsPresenter(this, this,this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +27,12 @@ class TopicsActivity : AppCompatActivity(), RenameDialog.RenameDialogListener, I
 
         initRV()
         initFAB()
+        topicPresenter.loadData()
+    }
+
+    override fun onDestroy() {
+        topicPresenter.onDestroy()
+        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -45,19 +49,11 @@ class TopicsActivity : AppCompatActivity(), RenameDialog.RenameDialogListener, I
     }
 
     override fun onDialogPositiveClick(renameDialog: RenameDialog) {
-        val topicName = renameDialog.newName.toString()
-        if (renameDialog.position != null) topics[renameDialog.position!!].name = topicName
-        else {
-            addNewTopic(topicName)
-        }
-        topicsAdapter?.notifyDataSetChanged()
+       topicPresenter.renameTopic(renameDialog)
     }
 
-    private fun addNewTopic(topicName: String) {
-        topics.add(Topic(412, topicName, false))
-        Handler().postDelayed({
-            topicsRV.smoothScrollToPosition(topics.size)
-        }, 350)
+    override fun scrollToPosition(position: Int) {
+        topicsRV.smoothScrollToPosition(position)
     }
 
     private fun initFAB() {
@@ -70,22 +66,12 @@ class TopicsActivity : AppCompatActivity(), RenameDialog.RenameDialogListener, I
     private fun initRV() {
         topicsRV.layoutManager = GridLayoutManager(this, 2)
         topicsRV.setHasFixedSize(true)
-        topicsAdapter = TopicsAdapter(topics, this, this)
-        topicsRV.adapter = topicsAdapter
+        topicsRV.adapter = topicPresenter.topicsAdapter
         addOnScrollListener()
     }
 
     private fun addOnScrollListener() {
         topicsRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-//            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-//                super.onScrollStateChanged(recyclerView, newState)
-//                when(newState){
-//                    RecyclerView.SCROLL_STATE_IDLE -> topicsFAB.show()
-//                    RecyclerView.SCROLL_STATE_DRAGGING -> topicsFAB.hide()
-//                }
-//            }
-
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy > 0 && topicsFAB.visibility == View.VISIBLE) topicsFAB.hide()

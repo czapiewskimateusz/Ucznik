@@ -14,7 +14,7 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import com.ucznik.model.entities.Topic
 import com.ucznik.ucznik.R
-import com.ucznik.view.TopicDetailActivity
+import com.ucznik.view.QuestionsActivity
 import kotlinx.android.synthetic.main.topic_item.view.*
 
 /**
@@ -29,6 +29,7 @@ class TopicsAdapter(private var topics: ArrayList<Topic>,
         fun showRenameDialog(position: Int)
         fun markDone(position: Int)
         fun markUndone(position: Int)
+        fun showQuestions(topicId: Long)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TopicViewHolder {
@@ -66,9 +67,7 @@ class TopicsAdapter(private var topics: ArrayList<Topic>,
         })
 
         holder?.container?.setOnClickListener({
-            //TODO Pass clicked topic id
-            val intent = Intent(context, TopicDetailActivity::class.java)
-            context.startActivity(intent)
+           topicsAdapterCallback.showQuestions(topics[position].topicId)
         })
     }
 

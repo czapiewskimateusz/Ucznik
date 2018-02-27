@@ -33,4 +33,7 @@
     <string name="questions_done">NAUCZONO</string>
     <string name="deleted">Usunięto</string>
     <string name="rename">Zmień nazwę</string>
+    <string name="question">Pytanie</string>
+    <string name="answer">Odpowiedź</string>
+    <string name="empty_data_error">Podane dane są niekompletne</string>
 </resources>

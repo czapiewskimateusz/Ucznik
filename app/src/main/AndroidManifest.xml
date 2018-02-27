@@ -34,7 +34,7 @@
             android:theme="@style/AppThemeActionBar" />
 
         <activity
-            android:name="com.ucznik.view.TopicDetailActivity"
+            android:name="com.ucznik.view.QuestionsActivity"
             android:theme="@style/AppThemeActionBar" />
     </application>
 

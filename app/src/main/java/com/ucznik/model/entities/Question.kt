@@ -16,8 +16,8 @@ data class Question(@PrimaryKey(autoGenerate = true) var questionId: Long,
     companion object {
         fun getSampleData(): ArrayList<Question> {
             val questions = ArrayList<Question>()
-            questions.add(Question(1, 1, "W którym roku był chrzest polski?", "966r", 0))
-            questions.add(Question(11, 1, "W którym roku był chrzest polski?", "966r", 1))
+            questions.add(Question(1, 1, "W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?", "966r", 0))
+            questions.add(Question(11, 1, "W którym roku był chrzest polski?", "966rW którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?W którym roku był chrzest polski?", 1))
             questions.add(Question(12, 1, "W którym roku był chrzest polski?", "966r", 0))
             questions.add(Question(13, 1, "W którym roku był chrzest polski?", "966r", 0))
             questions.add(Question(14, 1, "W którym roku był chrzest polski?", "966r", 1))

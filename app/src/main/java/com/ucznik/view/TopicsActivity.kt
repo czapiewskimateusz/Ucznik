@@ -1,7 +1,6 @@
 package com.ucznik.view
 
 import android.os.Bundle
-import android.os.Handler
 
 import android.support.v7.app.AppCompatActivity
 
@@ -10,10 +9,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.ucznik.model.entities.Topic
-import com.ucznik.presenter.adapters.TopicsAdapter
 import com.ucznik.presenter.TopicsPresenter
 import com.ucznik.ucznik.R
+import com.ucznik.view.dialogs.RenameDialog
 import com.ucznik.view.interfaces.ITopicsView
 import kotlinx.android.synthetic.main.activity_topics.*
 

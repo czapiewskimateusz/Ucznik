@@ -1,4 +1,4 @@
-package com.ucznik.view
+package com.ucznik.view.dialogs
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog

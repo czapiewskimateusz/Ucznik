@@ -21,14 +21,16 @@
 
         <TextView
             android:id="@+id/questionTV"
-            android:layout_width="280dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:ellipsize="end"
             android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/questionDoneIV"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="W jakim roku miał miejsce chrzest polski?" />
@@ -37,13 +39,14 @@
             android:id="@+id/questionDoneIV"
             android:layout_width="59dp"
             android:layout_height="51dp"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/question_done_mark_desc"
             app:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
-            card_view:srcCompat="@drawable/ic_done_empty"
-            android:contentDescription="@string/question_done_mark_desc" />
+            card_view:srcCompat="@drawable/ic_done_empty" />
     </android.support.constraint.ConstraintLayout>
 
 

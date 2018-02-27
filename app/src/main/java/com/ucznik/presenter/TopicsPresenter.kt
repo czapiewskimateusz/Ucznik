@@ -10,7 +10,8 @@ import com.ucznik.model.entities.Topic
 import com.ucznik.presenter.adapters.TopicsAdapter
 import com.ucznik.ucznik.R
 import com.ucznik.view.LoginActivity
-import com.ucznik.view.RenameDialog
+import com.ucznik.view.QuestionsActivity
+import com.ucznik.view.dialogs.RenameDialog
 import com.ucznik.view.interfaces.ITopicsView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,13 +21,15 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by Mateusz on 23.02.2018.
  */
+const val TOPIC_ID_EXTRA = "TOPIC_ID_EXTRA"
+
 class TopicsPresenter(val view: ITopicsView,
                       private val context: Context,
                       private val activity: FragmentActivity) : TopicsAdapter.TopicsAdapterCallback {
 
     private val compositeDisposable = CompositeDisposable()
     private var topics = ArrayList<Topic>()
-    var topicsAdapter: TopicsAdapter? = TopicsAdapter(topics, context, this)
+    var topicsAdapter = TopicsAdapter(topics, context, this)
     private var dataBase: AppDatabase? = null
 
     fun loadData() {
@@ -71,7 +74,7 @@ class TopicsPresenter(val view: ITopicsView,
 
     override fun markUndone(position: Int) {
         topics[position].done = 0
-        topicsAdapter?.notifyItemChanged(position)
+        topicsAdapter.notifyItemChanged(position)
         compositeDisposable.add(Observable.fromCallable { dataBase!!.topicDAO().updateTopic(topics[position]) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -121,13 +124,17 @@ class TopicsPresenter(val view: ITopicsView,
 
     override fun removeTopic(position: Int) {
         val deletedTopic = topics[position]
-        topicsAdapter?.notifyItemRemoved(position)
-        topicsAdapter?.notifyItemRangeChanged(position, topics.size)
+        topicsAdapter.notifyItemRemoved(position)
+        topicsAdapter.notifyItemRangeChanged(position, topics.size)
         compositeDisposable.add(Observable.fromCallable { dataBase!!.topicDAO().deleteTopic(deletedTopic) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe())
     }
 
-
+    override fun showQuestions(topicId: Long) {
+        val intent = Intent(context, QuestionsActivity::class.java)
+        intent.putExtra(TOPIC_ID_EXTRA,topicId)
+        context.startActivity(intent)
+    }
 }

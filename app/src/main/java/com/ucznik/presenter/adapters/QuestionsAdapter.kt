@@ -17,11 +17,12 @@ import kotlinx.android.synthetic.main.question_item.view.*
  */
 class QuestionsAdapter(private var questions: ArrayList<Question>,
                        private val context: Context,
-                       private val markedDoneListener: MarkedDoneListener) : RecyclerView.Adapter<QuestionsAdapter.QuestionViewHolder>() {
+                       private val questionsAdapterListener: QuestionsAdapterListener) : RecyclerView.Adapter<QuestionsAdapter.QuestionViewHolder>() {
 
-    interface MarkedDoneListener {
+    interface QuestionsAdapterListener {
         fun markedDone()
         fun markedUndone()
+        fun questionClicked(question:Question)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): QuestionViewHolder {
@@ -59,24 +60,24 @@ class QuestionsAdapter(private var questions: ArrayList<Question>,
                 } else {
                     markDone()
                 }
-                this@QuestionsAdapter.notifyDataSetChanged()
+                this@QuestionsAdapter.notifyItemChanged(position!!)
             })
 
             itemView.setOnClickListener({
-                Toast.makeText(context,questions[position!!].question, Toast.LENGTH_SHORT).show()
+                questionsAdapterListener.questionClicked(questions[position!!])
             })
         }
 
         private fun markUndone() {
             questionDoneIV.setImageDrawable(context.getDrawable(R.drawable.ic_done_empty))
             questions[position!!].done = 0
-            markedDoneListener.markedUndone()
+            questionsAdapterListener.markedUndone()
         }
 
         private fun markDone() {
             questionDoneIV.setImageDrawable(context.getDrawable(R.drawable.ic_done))
             questions[position!!].done = 1
-            markedDoneListener.markedDone()
+            questionsAdapterListener.markedDone()
         }
 
     }

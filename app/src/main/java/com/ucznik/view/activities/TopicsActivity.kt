@@ -1,4 +1,4 @@
-package com.ucznik.view
+package com.ucznik.view.activities
 
 import android.os.Bundle
 

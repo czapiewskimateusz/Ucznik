@@ -1,7 +1,6 @@
 package com.ucznik.presenter.adapters
 
 import android.content.Context
-import android.content.Intent
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -14,7 +13,6 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import com.ucznik.model.entities.Topic
 import com.ucznik.ucznik.R
-import com.ucznik.view.QuestionsActivity
 import kotlinx.android.synthetic.main.topic_item.view.*
 
 /**

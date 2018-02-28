@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.ucznik.view.LoginActivity"
+            android:name="com.ucznik.view.activities.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,16 +25,16 @@
         <activity
             android:name="com.ucznik.view.RegisterActivity"
             android:label="@string/register"
-            android:parentActivityName="com.ucznik.view.LoginActivity"
+            android:parentActivityName="com.ucznik.view.activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeActionBar" />
         <activity
-            android:name="com.ucznik.view.TopicsActivity"
+            android:name="com.ucznik.view.activities.TopicsActivity"
             android:label="@string/topics"
             android:theme="@style/AppThemeActionBar" />
 
         <activity
-            android:name="com.ucznik.view.QuestionsActivity"
+            android:name="com.ucznik.view.activities.QuestionsActivity"
             android:theme="@style/AppThemeActionBar" />
     </application>
 

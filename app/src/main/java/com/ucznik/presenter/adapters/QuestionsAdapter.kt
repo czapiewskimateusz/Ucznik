@@ -20,8 +20,7 @@ class QuestionsAdapter(private var questions: ArrayList<Question>,
                        private val questionsAdapterListener: QuestionsAdapterListener) : RecyclerView.Adapter<QuestionsAdapter.QuestionViewHolder>() {
 
     interface QuestionsAdapterListener {
-        fun markedDone()
-        fun markedUndone()
+        fun updateStatus(position: Int)
         fun questionClicked(question:Question)
     }
 
@@ -71,13 +70,13 @@ class QuestionsAdapter(private var questions: ArrayList<Question>,
         private fun markUndone() {
             questionDoneIV.setImageDrawable(context.getDrawable(R.drawable.ic_done_empty))
             questions[position!!].done = 0
-            questionsAdapterListener.markedUndone()
+            questionsAdapterListener.updateStatus(position!!)
         }
 
         private fun markDone() {
             questionDoneIV.setImageDrawable(context.getDrawable(R.drawable.ic_done))
             questions[position!!].done = 1
-            questionsAdapterListener.markedDone()
+            questionsAdapterListener.updateStatus(position!!)
         }
 
     }

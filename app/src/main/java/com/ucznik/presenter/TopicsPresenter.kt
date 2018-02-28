@@ -9,8 +9,8 @@ import com.ucznik.model.db.AppDatabase
 import com.ucznik.model.entities.Topic
 import com.ucznik.presenter.adapters.TopicsAdapter
 import com.ucznik.ucznik.R
-import com.ucznik.view.LoginActivity
-import com.ucznik.view.QuestionsActivity
+import com.ucznik.view.activities.LoginActivity
+import com.ucznik.view.activities.QuestionsActivity
 import com.ucznik.view.dialogs.RenameDialog
 import com.ucznik.view.interfaces.ITopicsView
 import io.reactivex.Observable
@@ -88,7 +88,7 @@ class TopicsPresenter(val view: ITopicsView,
                 .subscribe({
                     topics.clear()
                     topics.addAll(it)
-                    topicsAdapter?.notifyDataSetChanged()
+                    topicsAdapter.notifyDataSetChanged()
                 }))
     }
 

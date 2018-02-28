@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ucznik.view.TopicsActivity">
+    tools:context="com.ucznik.view.activities.TopicsActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/topicsRV"
@@ -20,11 +20,11 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/topicsFAB"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
         android:clickable="true"
         android:focusable="true"
         android:src="@android:drawable/ic_input_add"

@@ -7,7 +7,7 @@ import android.text.TextUtils
 import com.ucznik.ucznik.R
 import com.ucznik.view.interfaces.ILoginView
 import com.ucznik.view.RegisterActivity
-import com.ucznik.view.TopicsActivity
+import com.ucznik.view.activities.TopicsActivity
 
 
 /**

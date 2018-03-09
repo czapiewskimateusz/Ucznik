@@ -23,7 +23,7 @@ class TopicsAdapter(private var topics: ArrayList<Topic>,
                     private val topicsAdapterCallback: TopicsAdapterCallback) : RecyclerView.Adapter<TopicsAdapter.TopicViewHolder>() {
 
     interface TopicsAdapterCallback {
-        fun removeTopic(position: Int)
+        fun deleteTopic(position: Int)
         fun showRenameDialog(position: Int)
         fun markDone(position: Int)
         fun markUndone(position: Int)
@@ -109,7 +109,7 @@ class TopicsAdapter(private var topics: ArrayList<Topic>,
     }
 
     private fun removeTopic(position: Int) {
-       topicsAdapterCallback.removeTopic(position)
+       topicsAdapterCallback.deleteTopic(position)
     }
 
     inner class TopicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

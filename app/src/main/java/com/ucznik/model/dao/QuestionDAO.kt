@@ -12,7 +12,7 @@ import io.reactivex.Flowable
 @Dao interface QuestionDAO {
 
     @Query("select * from question where topicId = :arg0")
-    fun getAllQuestions(topicId: Long): Flowable<List<Question>>
+    fun getAllQuestions(topicId: Long): List<Question>
 
     @Query("select * from question where questionId = :arg0")
     fun findQuestionById(id: Long): Question

@@ -1,4 +1,4 @@
-package com.ucznik.model.db
+package com.ucznik.model
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room

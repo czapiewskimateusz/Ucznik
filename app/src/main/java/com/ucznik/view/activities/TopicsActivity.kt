@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_topics.*
 
 class TopicsActivity : AppCompatActivity(), RenameDialog.RenameDialogListener, ITopicsView {
 
-    private val topicPresenter = TopicsPresenter(this, this,this)
+    private val topicPresenter = TopicsPresenter(this, this, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +47,7 @@ class TopicsActivity : AppCompatActivity(), RenameDialog.RenameDialogListener, I
     }
 
     override fun onDialogPositiveClick(renameDialog: RenameDialog) {
-       topicPresenter.renameTopic(renameDialog)
+        topicPresenter.renameTopic(renameDialog)
     }
 
     override fun scrollToPosition(position: Int) {
@@ -70,11 +70,12 @@ class TopicsActivity : AppCompatActivity(), RenameDialog.RenameDialogListener, I
 
     private fun addOnScrollListener() {
         topicsRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0 && topicsFAB.visibility == View.VISIBLE) topicsFAB.hide()
-                else if (dy < 0 && topicsFAB.visibility != View.VISIBLE) topicsFAB.show()
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) topicsFAB.hide()
+                else if (newState == RecyclerView.SCROLL_STATE_IDLE) topicsFAB.show()
             }
+
         })
     }
 }

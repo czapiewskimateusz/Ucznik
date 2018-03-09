@@ -5,14 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_marginBottom="8dp"
+    android:clickable="true"
     android:elevation="8dp"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    android:clickable="true"
     app:cardBackgroundColor="@color/cardview_dark_background"
-    app:cardElevation="8dp"
-    card_view:cardCornerRadius="16dp">
+    app:cardCornerRadius="2dp"
+    app:cardElevation="8dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,14 +23,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:ellipsize="end"
             android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/questionDoneIV"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/questionDoneIV"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="W jakim roku miał miejsce chrzest polski?" />
 
@@ -39,10 +39,10 @@
             android:layout_width="59dp"
             android:layout_height="51dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/question_done_mark_desc"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
             card_view:srcCompat="@drawable/ic_done_empty" />

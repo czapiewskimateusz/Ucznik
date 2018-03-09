@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Menu
-import android.view.View
 import android.widget.Toast
 import com.ucznik.presenter.QuestionsPresenter
 import com.ucznik.presenter.TOPIC_ID_EXTRA
@@ -25,10 +24,9 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_topic_detail)
 
-        questionPresenter.topicId = intent.getLongExtra(TOPIC_ID_EXTRA,-1)
         initRV()
         initFAB()
-        questionPresenter.loadData()
+        questionPresenter.loadData(intent.getLongExtra(TOPIC_ID_EXTRA, -1))
     }
 
     override fun onDestroy() {
@@ -72,7 +70,7 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
         val handler = Handler()
         handler.postDelayed({
             questionsRV.smoothScrollToPosition(i)
-        },300)
+        }, 300)
     }
 
     private fun initRV() {
@@ -86,7 +84,7 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
     private fun addOnSwipeListener() {
         val swipeHandler = object : SwipeToDeleteCallback(this) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                questionPresenter.removeAt(viewHolder.adapterPosition)
+                questionPresenter.removeQuestion(viewHolder.adapterPosition)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)
@@ -95,11 +93,13 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
 
     private fun addOnScrollListener() {
         questionsRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0 && questionsFAB.visibility == View.VISIBLE) questionsFAB.hide()
-                else if (dy < 0 && questionsFAB.visibility != View.VISIBLE) questionsFAB.show()
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) questionsFAB.hide()
+                else if (newState == RecyclerView.SCROLL_STATE_IDLE) questionsFAB.show()
             }
+
         })
     }
 }

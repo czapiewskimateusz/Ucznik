@@ -11,7 +11,7 @@ import io.reactivex.Flowable
 @Dao interface TopicDAO {
 
     @Query("select * from topic")
-    fun getAllTopics(): Flowable<List<Topic>>
+    fun getAllTopics(): List<Topic>
 
     @Query("select * from topic where topicId = :arg0")
     fun findTopicById(id: Long): Topic

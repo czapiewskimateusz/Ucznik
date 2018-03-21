@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.support.v4.app.FragmentActivity
-import android.widget.Toast
 import com.ucznik.model.AppDatabase
 import com.ucznik.model.entities.Topic
 import com.ucznik.presenter.adapters.TopicsAdapter

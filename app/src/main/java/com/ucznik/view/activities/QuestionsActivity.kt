@@ -1,11 +1,11 @@
 package com.ucznik.view.activities
 
-
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Menu
 import android.widget.Toast
@@ -43,6 +43,20 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.topic_detail_menu, menu)
+
+        val searchItem = menu?.findItem(R.id.search_question_menu)
+        val searchView = searchItem?.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                questionPresenter.onQueryTextChange(newText)
+                return true
+            }
+        })
+
         return true
     }
 

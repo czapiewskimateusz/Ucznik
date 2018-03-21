@@ -14,5 +14,6 @@
         android:checkable="false"
         android:enabled="true"
         android:title="@string/search_question_menu"
-        app:showAsAction="ifRoom" />
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always" />
 </menu>

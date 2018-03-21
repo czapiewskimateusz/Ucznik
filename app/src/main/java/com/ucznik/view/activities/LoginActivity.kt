@@ -21,7 +21,6 @@ class LoginActivity : AppCompatActivity(), ILoginView {
 
         loginPresenter.checkIfLoggedIn()
         initListeners()
-        setKeyboardListener()
     }
 
     override fun showProgress(show: Boolean) {
@@ -55,6 +54,8 @@ class LoginActivity : AppCompatActivity(), ILoginView {
         register_hint?.setOnClickListener({
             loginPresenter.startRegisterActivity()
         })
+
+        setKeyboardListener()
     }
 
     private fun setKeyboardListener() {

@@ -10,8 +10,8 @@ import com.ucznik.model.entities.Question
 import com.ucznik.model.entities.Topic
 
 /**
- * Created by Mateusz on 24.02.2018.
- */
+* Created by Mateusz on 24.02.2018.
+*/
 
 @Database(entities = arrayOf(Topic::class,Question::class),version = 2, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {

@@ -1,4 +1,5 @@
 package com.ucznik.presenter
+
 import android.app.FragmentTransaction
 import android.content.Context
 import android.graphics.Color
@@ -12,10 +13,6 @@ import com.ucznik.ucznik.R
 import com.ucznik.view.dialogs.QuestionEditDialog
 import com.ucznik.view.interfaces.IQuestionsView
 
-
-/**
-* Created by Mateusz on 27.02.2018.
-*/
 class QuestionsPresenter(val view: IQuestionsView,
                          private val context: Context,
                          private val activity: FragmentActivity) : QuestionsAdapter.QuestionsAdapterListener {
@@ -48,15 +45,29 @@ class QuestionsPresenter(val view: IQuestionsView,
         changeStatus()
     }
 
+    override fun updateStatus(id: Long) {
+        updateQuestionDB(getQuestionById(id))
+        changeStatus()
+    }
+
+    private fun getQuestionById(id: Long): Question {
+        var question: Question? = null
+        questions.forEach({
+            if (it.questionId == id) {
+                question = it
+            }
+        })
+        return question!!
+    }
+
     override fun questionClicked(question: Question) {
         showDialog(question)
     }
 
     fun showDialog(question: Question?) {
-        val fragmentManager = activity.supportFragmentManager
         val questionEditDialog = QuestionEditDialog()
         questionEditDialog.oldQuestion = question
-        val transaction = fragmentManager.beginTransaction()
+        val transaction = activity.supportFragmentManager.beginTransaction()
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         transaction.add(android.R.id.content, questionEditDialog).addToBackStack("dialog").commit()
     }
@@ -73,13 +84,13 @@ class QuestionsPresenter(val view: IQuestionsView,
         if (questionEditDialog.oldQuestion == null) {
             addNewQuestion(questionEditDialog)
         } else {
-            questions.forEachIndexed(action = { index, question ->
+            questions.forEach(action = { question ->
                 if (question.questionId == questionEditDialog.oldQuestion?.questionId) {
                     question.question = questionEditDialog.question!!
                     question.answer = questionEditDialog.answer!!
-                    updateQuestionDB(question)
-                    questionsAdapter.notifyItemChanged(index)
+                    questionsAdapter.update(question)
                     hideDialog(questionEditDialog)
+                    updateQuestionDB(question)
                     return
                 }
             })
@@ -90,24 +101,35 @@ class QuestionsPresenter(val view: IQuestionsView,
         val question = Question(topicId!!, questionEditDialog.question!!, questionEditDialog.answer!!, 0)
         insertQuestionDB(question)
         questions.add(question)
-        questionsAdapter.notifyItemInserted(questions.size - 1)
+        questionsAdapter.add(question)
+        //  questionsAdapter.notifyItemInserted(questions.size - 1)
         view.scrollToPosition(questions.size - 1)
         hideDialog(questionEditDialog)
+        changeStatus()
     }
 
     fun removeQuestion(adapterPosition: Int) {
-        val question = questions[adapterPosition]
+        val question = questionsAdapter.getQuestion(adapterPosition)
         showSnackBar(question, adapterPosition)
-        questions.removeAt(adapterPosition)
-        questionsAdapter.notifyItemRemoved(adapterPosition)
-        questionsAdapter.notifyItemRangeChanged(adapterPosition, questions.size)
+        removeQuestionById(question)
+        questionsAdapter.remove(question)
+        //  questionsAdapter.notifyItemRemoved(adapterPosition)
+        //  questionsAdapter.notifyItemRangeChanged(adapterPosition, questions.size)
         deleteQuestionDB(question)
+        changeStatus()
+    }
+
+    private fun removeQuestionById(question: Question) {
+        var temp: Question? = null
+        questions.forEach({
+            if (it.questionId == question.questionId) temp = it
+        })
+        questions.remove(temp)
     }
 
     private fun recoverQuestion(question: Question, adapterPosition: Int) {
         questions.add(adapterPosition, question)
-        questionsAdapter.notifyItemInserted(adapterPosition)
-        questionsAdapter.notifyItemRangeChanged(adapterPosition, questions.size - 1)
+        questionsAdapter.add(question)
         insertQuestionDB(question)
     }
 
@@ -121,12 +143,28 @@ class QuestionsPresenter(val view: IQuestionsView,
         AppDatabase.destroyInstance()
     }
 
+    fun onQueryTextChange(query: String?) {
+        val filteredModeList = filter(questions, query!!)
+        questionsAdapter.replaceAll(filteredModeList)
+        view.scrollToPosition(0)
+    }
+
+    private fun filter(questions: List<Question>, query: String): List<Question> {
+        val lowerCaseQuery = query.toLowerCase()
+        val filteredModelList = ArrayList<Question>()
+        questions.forEach {
+            val text = it.question.toLowerCase()
+            if (text.contains(lowerCaseQuery)) filteredModelList.add(it)
+        }
+        return filteredModelList
+    }
+
     private fun fetchQuestionDataFromDB() {
         AsyncTask.execute({
             run {
                 questions.clear()
                 questions.addAll(dataBase!!.questionDAO().getAllQuestions(topicId!!))
-                questionsAdapter.notifyDataSetChanged()
+                questionsAdapter.addAll(questions)
                 changeStatus()
             }
         })
@@ -156,3 +194,4 @@ class QuestionsPresenter(val view: IQuestionsView,
         })
     }
 }
+

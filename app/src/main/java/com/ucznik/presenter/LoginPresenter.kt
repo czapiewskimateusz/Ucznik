@@ -11,14 +11,13 @@ import com.ucznik.view.activities.TopicsActivity
 
 
 /**
- * Created by Mateusz on 21.02.2018.
- */
+* Created by Mateusz on 21.02.2018.
+*/
 class LoginPresenter(private val view: ILoginView, private val context: Context) {
 
     fun login(email: String, password: String) {
         //view.showProgress(true)
         if (verifyCredentials(email, password)) {
-            view.onLoginError("JEST OK")
             saveUsersId(1)
             startTopicsActivity()
         }

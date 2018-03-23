@@ -16,10 +16,15 @@ class QuestionsAdapter(private val questions: ArrayList<Question>,
                        private val context: Context,
                        private val questionsAdapterListener: QuestionsAdapterListener) : RecyclerView.Adapter<QuestionsAdapter.QuestionViewHolder>() {
 
+    interface QuestionsAdapterListener {
+        fun updateStatus(id: Long)
+        fun questionClicked(question: Question)
+    }
+
     private val sortedList = SortedList<Question>(Question::class.java, object : SortedList.Callback<Question>() {
 
         override fun areItemsTheSame(item1: Question?, item2: Question?): Boolean {
-            return item1?.questionId == item2?.questionId
+            return (item1?.question.equals(item2?.question) && item1?.answer.equals(item2?.answer))
         }
 
         override fun onMoved(fromPosition: Int, toPosition: Int) {
@@ -43,15 +48,9 @@ class QuestionsAdapter(private val questions: ArrayList<Question>,
         }
 
         override fun areContentsTheSame(oldItem: Question?, newItem: Question?): Boolean {
-            return oldItem?.question?.equals(newItem?.question)!!
+            return (oldItem?.answer.equals(newItem?.answer) && oldItem?.question.equals(newItem?.question))
         }
     })
-
-    interface QuestionsAdapterListener {
-        fun updateStatus(position: Int)
-        fun updateStatus(id: Long)
-        fun questionClicked(question: Question)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): QuestionViewHolder {
         val v = LayoutInflater.from(parent?.context).inflate(R.layout.question_item, parent, false)
@@ -105,9 +104,6 @@ class QuestionsAdapter(private val questions: ArrayList<Question>,
         return sortedList[adapterPosition]
     }
 
-    /**
-     * Sets a DONE mark based on topics done parameter
-     */
     private fun setDoneMark(position: Int, holder: QuestionViewHolder?) {
         if (sortedList[position].done == 1) holder?.questionDoneIV?.setImageDrawable(context.getDrawable(R.drawable.ic_done))
         else holder?.questionDoneIV?.setImageDrawable(context.getDrawable(R.drawable.ic_done_empty))

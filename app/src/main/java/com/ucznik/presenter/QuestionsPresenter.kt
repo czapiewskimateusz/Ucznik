@@ -28,6 +28,10 @@ class QuestionsPresenter(val view: IQuestionsView,
         fetchQuestionDataFromDB()
     }
 
+    fun onDestroy() {
+        AppDatabase.destroyInstance()
+    }
+
     private fun changeStatus() {
         var done = 0.0
         questions.forEach { q -> if (q.done == 1) done++ }
@@ -38,11 +42,6 @@ class QuestionsPresenter(val view: IQuestionsView,
             percentage <= 80.0 -> view.setStatusColor(Color.YELLOW)
             else -> view.setStatusColor(Color.GREEN)
         }
-    }
-
-    override fun updateStatus(position: Int) {
-        updateQuestionDB(questions[position])
-        changeStatus()
     }
 
     override fun updateStatus(id: Long) {
@@ -86,61 +85,50 @@ class QuestionsPresenter(val view: IQuestionsView,
         } else {
             questions.forEach(action = { question ->
                 if (question.questionId == questionEditDialog.oldQuestion?.questionId) {
-                    question.question = questionEditDialog.question!!
-                    question.answer = questionEditDialog.answer!!
-                    questionsAdapter.update(question)
-                    hideDialog(questionEditDialog)
-                    updateQuestionDB(question)
+                    performUpdate(question, questionEditDialog)
                     return
                 }
             })
         }
     }
 
+    private fun performUpdate(question: Question, questionEditDialog: QuestionEditDialog) {
+        question.question = questionEditDialog.question!!
+        question.answer = questionEditDialog.answer!!
+        questionsAdapter.update(question)
+        hideDialog(questionEditDialog)
+        updateQuestionDB(question)
+    }
+
     private fun addNewQuestion(questionEditDialog: QuestionEditDialog) {
         val question = Question(topicId!!, questionEditDialog.question!!, questionEditDialog.answer!!, 0)
-        insertQuestionDB(question)
         questions.add(question)
         questionsAdapter.add(question)
-        //  questionsAdapter.notifyItemInserted(questions.size - 1)
-        view.scrollToPosition(questions.size - 1)
         hideDialog(questionEditDialog)
         changeStatus()
+        insertQuestionDB(question)
     }
 
     fun removeQuestion(adapterPosition: Int) {
         val question = questionsAdapter.getQuestion(adapterPosition)
         showSnackBar(question, adapterPosition)
-        removeQuestionById(question)
+        questions.remove(question)
         questionsAdapter.remove(question)
-        //  questionsAdapter.notifyItemRemoved(adapterPosition)
-        //  questionsAdapter.notifyItemRangeChanged(adapterPosition, questions.size)
         deleteQuestionDB(question)
         changeStatus()
-    }
-
-    private fun removeQuestionById(question: Question) {
-        var temp: Question? = null
-        questions.forEach({
-            if (it.questionId == question.questionId) temp = it
-        })
-        questions.remove(temp)
     }
 
     private fun recoverQuestion(question: Question, adapterPosition: Int) {
         questions.add(adapterPosition, question)
         questionsAdapter.add(question)
         insertQuestionDB(question)
+        changeStatus()
     }
 
     private fun showSnackBar(question: Question, position: Int) {
         Snackbar.make(activity.currentFocus, question.question, Snackbar.LENGTH_LONG).setAction(context.getString(R.string.cancel), {
             recoverQuestion(question, position)
         }).show()
-    }
-
-    fun onDestroy() {
-        AppDatabase.destroyInstance()
     }
 
     fun onQueryTextChange(query: String?) {

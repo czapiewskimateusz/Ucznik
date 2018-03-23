@@ -35,7 +35,8 @@
 
         <activity
             android:name="com.ucznik.view.activities.QuestionsActivity"
-            android:theme="@style/AppThemeActionBar" />
+            android:theme="@style/AppThemeActionBar"
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>

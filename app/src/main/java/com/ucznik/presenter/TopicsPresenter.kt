@@ -15,9 +15,9 @@ import com.ucznik.view.dialogs.RenameDialog
 import com.ucznik.view.interfaces.ITopicsView
 
 /**
-* Created by Mateusz on 23.02.2018.
-*/
-        const val TOPIC_ID_EXTRA = "TOPIC_ID_EXTRA"
+ * Created by Mateusz Czapiewski on 23.02.2018.
+ */
+const val TOPIC_ID_EXTRA = "TOPIC_ID_EXTRA"
 
 class TopicsPresenter(val view: ITopicsView,
                       private val context: Context,
@@ -59,7 +59,7 @@ class TopicsPresenter(val view: ITopicsView,
     override fun markDone(position: Int) {
         topics[position].done = 1
         topicsAdapter.notifyItemChanged(position)
-        updateTopicDB(topics[position])
+       updateTopicDB(topics[position])
     }
 
     override fun markUndone(position: Int) {
@@ -85,9 +85,7 @@ class TopicsPresenter(val view: ITopicsView,
 
     private fun addNewTopic(topicName: String) {
         val newTopic = Topic(name = topicName, done = 0)
-        addTopicDB(newTopic)
-        topics.add(newTopic)
-        topicsAdapter.notifyItemInserted(topics.size-1)
+        insertTopicDB(newTopic,topics,topicsAdapter)
     }
 
     override fun deleteTopic(position: Int) {
@@ -105,30 +103,43 @@ class TopicsPresenter(val view: ITopicsView,
     }
 
     private fun fetchTopicDataFromDB() {
+       DatabaseGetTopics(this).execute()
+    }
+
+    fun updateTopicDB(topic: Topic) {
+        AsyncTask.execute({
+            run { AppDatabase.getInstance(context)!!.topicDAO().updateTopic(topic) }
+        })
+    }
+
+
+    fun insertTopicDB(newTopic: Topic, topics: ArrayList<Topic>, topicsAdapter: TopicsAdapter) {
         AsyncTask.execute({
             run {
-                topics.clear()
-                topics.addAll(dataBase!!.topicDAO().getAllTopics())
-                topicsAdapter.notifyDataSetChanged()
+                newTopic.topicId = AppDatabase.getInstance(context)!!.topicDAO().insertTopic(newTopic)
+                topics.add(newTopic)
+                topicsAdapter.notifyItemInserted(topics.size - 1)
             }
         })
     }
 
-    private fun updateTopicDB(topic: Topic) {
+    fun deleteTopicDB(deletedTopic: Topic) {
         AsyncTask.execute({
-            run { dataBase!!.topicDAO().updateTopic(topic) }
+            run { AppDatabase.getInstance(context)!!.topicDAO().deleteTopic(deletedTopic) }
         })
     }
 
-    private fun addTopicDB(newTopic: Topic) {
-        AsyncTask.execute({
-            run { dataBase!!.topicDAO().insertTopic(newTopic) }
-        })
-    }
+    companion object {
+        class DatabaseGetTopics(private val topicsPresenter: TopicsPresenter) : AsyncTask<Unit, Int, ArrayList<Topic>>() {
+            override fun doInBackground(vararg p0: Unit?): ArrayList<Topic> {
+                topicsPresenter.topics.clear()
+                topicsPresenter.topics.addAll(AppDatabase.getInstance(topicsPresenter.context)?.topicDAO()?.getAllTopics()!!)
+                return topicsPresenter.topics
+            }
 
-    private fun deleteTopicDB(deletedTopic: Topic) {
-        AsyncTask.execute({
-            run { dataBase!!.topicDAO().deleteTopic(deletedTopic) }
-        })
+            override fun onPostExecute(result: ArrayList<Topic>?) {
+                topicsPresenter.topicsAdapter.notifyDataSetChanged()
+            }
+        }
     }
 }

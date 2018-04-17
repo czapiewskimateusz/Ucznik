@@ -12,11 +12,11 @@ import com.ucznik.model.entities.Topic
     @Query("select * from topic")
     fun getAllTopics(): List<Topic>
 
-    @Query("select * from topic where topicId = :arg0")
+    @Query("select * from topic where topicId = :id")
     fun findTopicById(id: Long): Topic
 
     @Insert(onConflict = REPLACE)
-    fun insertTopic(topic: Topic)
+    fun insertTopic(topic: Topic):Long
 
     @Update(onConflict = REPLACE)
     fun updateTopic(topic: Topic)

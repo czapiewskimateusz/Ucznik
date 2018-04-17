@@ -2,14 +2,17 @@ package com.ucznik.presenter
 
 import android.app.FragmentTransaction
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.AsyncTask
 import android.support.design.widget.Snackbar
 import android.support.v4.app.FragmentActivity
+import android.widget.Toast
 import com.ucznik.model.AppDatabase
 import com.ucznik.model.entities.Question
 import com.ucznik.presenter.adapters.QuestionsAdapter
 import com.ucznik.ucznik.R
+import com.ucznik.view.activities.LearnActivity
 import com.ucznik.view.dialogs.QuestionEditDialog
 import com.ucznik.view.interfaces.IQuestionsView
 
@@ -20,11 +23,9 @@ class QuestionsPresenter(val view: IQuestionsView,
     private var questions = ArrayList<Question>()
     var questionsAdapter = QuestionsAdapter(questions, context, this)
     var topicId: Long? = null
-    private var dataBase: AppDatabase? = null
 
     fun loadData(topicId: Long) {
         this.topicId = topicId
-        dataBase = AppDatabase.getInstance(context)
         fetchQuestionDataFromDB()
     }
 
@@ -45,18 +46,17 @@ class QuestionsPresenter(val view: IQuestionsView,
     }
 
     override fun updateStatus(id: Long) {
-        updateQuestionDB(getQuestionById(id))
+        updateQuestion(getQuestionById(id)!!)
         changeStatus()
     }
 
-    private fun getQuestionById(id: Long): Question {
-        var question: Question? = null
+    private fun getQuestionById(id: Long): Question? {
         questions.forEach({
             if (it.questionId == id) {
-                question = it
+                return it
             }
         })
-        return question!!
+        return null
     }
 
     override fun questionClicked(question: Question) {
@@ -97,7 +97,7 @@ class QuestionsPresenter(val view: IQuestionsView,
         question.answer = questionEditDialog.answer!!
         questionsAdapter.update(question)
         hideDialog(questionEditDialog)
-        updateQuestionDB(question)
+        updateQuestion(question)
     }
 
     private fun addNewQuestion(questionEditDialog: QuestionEditDialog) {
@@ -106,7 +106,7 @@ class QuestionsPresenter(val view: IQuestionsView,
         questionsAdapter.add(question)
         hideDialog(questionEditDialog)
         changeStatus()
-        insertQuestionDB(question)
+        insertQuestion(question)
     }
 
     fun removeQuestion(adapterPosition: Int) {
@@ -114,14 +114,14 @@ class QuestionsPresenter(val view: IQuestionsView,
         showSnackBar(question, adapterPosition)
         questions.remove(question)
         questionsAdapter.remove(question)
-        deleteQuestionDB(question)
+        deleteQuestion(question)
         changeStatus()
     }
 
     private fun recoverQuestion(question: Question, adapterPosition: Int) {
         questions.add(adapterPosition, question)
         questionsAdapter.add(question)
-        insertQuestionDB(question)
+        insertQuestion(question)
         changeStatus()
     }
 
@@ -132,12 +132,12 @@ class QuestionsPresenter(val view: IQuestionsView,
     }
 
     fun onQueryTextChange(query: String?) {
-        val filteredModeList = filter(questions, query!!)
+        val filteredModeList = filterQuestions(questions, query!!)
         questionsAdapter.replaceAll(filteredModeList)
         view.scrollToPosition(0)
     }
 
-    private fun filter(questions: List<Question>, query: String): List<Question> {
+    private fun filterQuestions(questions: List<Question>, query: String): List<Question> {
         val lowerCaseQuery = query.toLowerCase()
         val filteredModelList = ArrayList<Question>()
         questions.forEach {
@@ -148,38 +148,74 @@ class QuestionsPresenter(val view: IQuestionsView,
     }
 
     private fun fetchQuestionDataFromDB() {
+        val task = DatabaseGetQuestions(this)
+        task.execute(topicId)
+    }
+
+    private fun updateQuestion(question: Question) {
         AsyncTask.execute({
             run {
-                questions.clear()
-                questions.addAll(dataBase!!.questionDAO().getAllQuestions(topicId!!))
-                questionsAdapter.addAll(questions)
-                changeStatus()
+                AppDatabase.getInstance(context)!!.questionDAO().updateQuestion(question)
             }
         })
     }
 
-    private fun updateQuestionDB(question: Question) {
+    private fun insertQuestion(question: Question) {
         AsyncTask.execute({
             run {
-                dataBase!!.questionDAO().updateQuestion(question)
+                AppDatabase.getInstance(context)!!.questionDAO().insertQuestion(question)
             }
         })
     }
 
-    private fun insertQuestionDB(question: Question) {
+    private fun deleteQuestion(question: Question) {
         AsyncTask.execute({
             run {
-                dataBase!!.questionDAO().insertQuestion(question)
+                AppDatabase.getInstance(context)!!.questionDAO().deleteQuestion(question)
             }
         })
     }
 
-    private fun deleteQuestionDB(question: Question) {
-        AsyncTask.execute({
-            run {
-                dataBase!!.questionDAO().deleteQuestion(question)
-            }
+    fun startLearning(): Boolean {
+        if (allLearned()) showAlreadyLearnedToast()
+        else {
+            startLearningActivity()
+        }
+        return true
+    }
+
+    private fun startLearningActivity() {
+        val intent = Intent(context, LearnActivity::class.java)
+        intent.putExtra(TOPIC_ID_EXTRA, topicId)
+        context.startActivity(intent)
+    }
+
+    private fun showAlreadyLearnedToast() {
+        Toast.makeText(context, context.getText(R.string.already_learned), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun allLearned(): Boolean {
+        questions.forEach({
+            if (it.done == 0) return false
         })
+        return true
+    }
+
+    companion object {
+        class DatabaseGetQuestions(private val questionsPresenter: QuestionsPresenter) : AsyncTask<Long, Int, ArrayList<Question>>() {
+
+            override fun doInBackground(vararg topicId: Long?): ArrayList<Question> {
+                questionsPresenter.questions.clear()
+                questionsPresenter.questions.addAll(AppDatabase.getInstance(questionsPresenter.context)!!.questionDAO().getAllQuestions(topicId[0]!!))
+                return questionsPresenter.questions
+            }
+
+            override fun onPostExecute(result: ArrayList<Question>?) {
+                questionsPresenter.questionsAdapter.addAll(result!!)
+                questionsPresenter.changeStatus()
+                questionsPresenter.questionsAdapter.notifyDataSetChanged()
+            }
+        }
     }
 }
 

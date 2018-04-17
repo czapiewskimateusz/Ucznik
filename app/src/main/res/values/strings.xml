@@ -36,4 +36,8 @@
     <string name="question">Pytanie</string>
     <string name="answer">Odpowiedź</string>
     <string name="empty_data_error">Podane dane są niekompletne</string>
+    <string name="dont_know_question">Nie umiem</string>
+    <string name="know_question">umiem</string>
+    <string name="done_learning">Gratuluacje! Nauka zakończona</string>
+    <string name="already_learned">Nie ma niczego do nauki!</string>
 </resources>

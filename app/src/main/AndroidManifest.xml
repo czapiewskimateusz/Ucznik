@@ -32,11 +32,11 @@
             android:name="com.ucznik.view.activities.TopicsActivity"
             android:label="@string/topics"
             android:theme="@style/AppThemeActionBar" />
-
         <activity
             android:name="com.ucznik.view.activities.QuestionsActivity"
             android:theme="@style/AppThemeActionBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name="com.ucznik.view.activities.LearnActivity"></activity>
     </application>
 
 </manifest>

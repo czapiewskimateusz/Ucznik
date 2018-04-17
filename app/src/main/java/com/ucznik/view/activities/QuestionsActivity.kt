@@ -34,6 +34,11 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
         super.onDestroy()
     }
 
+    override fun onRestart() {
+        questionPresenter.loadData(intent.getLongExtra(TOPIC_ID_EXTRA, -1))
+        super.onRestart()
+    }
+
     private fun initFAB() {
         questionsFAB.setOnClickListener {
             questionPresenter.showDialog(null)
@@ -56,6 +61,11 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
                 return true
             }
         })
+
+        val leanItem = menu.findItem(R.id.learn_menu)
+        leanItem.setOnMenuItemClickListener {
+            questionPresenter.startLearning()
+        }
 
         return true
     }

@@ -9,14 +9,14 @@ import com.ucznik.model.entities.Question
 */
 @Dao interface QuestionDAO {
 
-    @Query("select * from question where topicId = :arg0")
+    @Query("select * from question where topicId = :topicId")
     fun getAllQuestions(topicId: Long): List<Question>
 
-    @Query("select * from question where questionId = :arg0")
+    @Query("select * from question where questionId = :id")
     fun findQuestionById(id: Long): Question
 
     @Insert(onConflict = REPLACE)
-    fun insertQuestion(question: Question)
+    fun insertQuestion(question: Question):Long
 
     @Update(onConflict = REPLACE)
     fun updateQuestion(question: Question)

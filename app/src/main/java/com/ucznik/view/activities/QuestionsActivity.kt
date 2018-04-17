@@ -3,11 +3,13 @@ package com.ucznik.view.activities
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import com.ucznik.presenter.QuestionsPresenter
 import com.ucznik.presenter.TOPIC_ID_EXTRA
@@ -48,9 +50,21 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.topic_detail_menu, menu)
-
         val searchItem = menu?.findItem(R.id.search_question_menu)
         val searchView = searchItem?.actionView as SearchView
+        initSearchMenu(searchView)
+        val leanItem = menu.findItem(R.id.learn_menu)
+        initLearnMenu(leanItem)
+        return true
+    }
+
+    private fun initLearnMenu(leanItem: MenuItem) {
+        leanItem.setOnMenuItemClickListener {
+            questionPresenter.startLearning()
+        }
+    }
+
+    private fun initSearchMenu(searchView: SearchView) {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -61,13 +75,6 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
                 return true
             }
         })
-
-        val leanItem = menu.findItem(R.id.learn_menu)
-        leanItem.setOnMenuItemClickListener {
-            questionPresenter.startLearning()
-        }
-
-        return true
     }
 
     override fun updateQuestionStatus(status: String) {
@@ -79,7 +86,7 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
     }
 
     override fun onDialogPositiveClick(questionEditDialog: QuestionEditDialog) {
-        questionPresenter.updateQuestion(questionEditDialog)
+        questionPresenter.updateQuestionDB(questionEditDialog)
     }
 
     override fun onDialogNegativeClick(questionEditDialog: QuestionEditDialog) {
@@ -95,6 +102,10 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
         handler.postDelayed({
             questionsRV.smoothScrollToPosition(i)
         }, 300)
+    }
+
+    override fun alreadyLearned() {
+        Snackbar.make(findViewById(R.id.coordinatorLayout),this.getText(R.string.already_learned),Snackbar.LENGTH_LONG).show()
     }
 
     private fun initRV() {

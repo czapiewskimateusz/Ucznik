@@ -28,9 +28,9 @@ class TopicsActivity : AppCompatActivity(), RenameDialog.RenameDialogListener, I
         topicPresenter.loadData()
     }
 
-    override fun onDestroy() {
-        topicPresenter.onDestroy()
-        super.onDestroy()
+    override fun onRestart() {
+        topicPresenter.loadData()
+        super.onRestart()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

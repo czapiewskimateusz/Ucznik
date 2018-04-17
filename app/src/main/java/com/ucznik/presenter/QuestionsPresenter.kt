@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.os.AsyncTask
 import android.support.design.widget.Snackbar
 import android.support.v4.app.FragmentActivity
-import android.widget.Toast
 import com.ucznik.model.AppDatabase
 import com.ucznik.model.entities.Question
 import com.ucznik.presenter.adapters.QuestionsAdapter
@@ -26,7 +25,7 @@ class QuestionsPresenter(val view: IQuestionsView,
 
     fun loadData(topicId: Long) {
         this.topicId = topicId
-        fetchQuestionDataFromDB()
+        DatabaseGetQuestions(this).execute(topicId)
     }
 
     fun onDestroy() {
@@ -36,6 +35,12 @@ class QuestionsPresenter(val view: IQuestionsView,
     private fun changeStatus() {
         var done = 0.0
         questions.forEach { q -> if (q.done == 1) done++ }
+        if (done == questions.size.toDouble() && questions.size > 0) markTopicDoneDB()
+        else markTopicUnDoneDB()
+        checkPercentage(done)
+    }
+
+    private fun checkPercentage(done: Double) {
         val percentage: Double = (done / questions.size) * 100
         view.updateQuestionStatus(String.format("%.2f", percentage) + "%")
         when {
@@ -46,7 +51,7 @@ class QuestionsPresenter(val view: IQuestionsView,
     }
 
     override fun updateStatus(id: Long) {
-        updateQuestion(getQuestionById(id)!!)
+        updateQuestionDB(getQuestionById(id)!!)
         changeStatus()
     }
 
@@ -79,7 +84,7 @@ class QuestionsPresenter(val view: IQuestionsView,
         fragmentManager.popBackStack()
     }
 
-    fun updateQuestion(questionEditDialog: QuestionEditDialog) {
+    fun updateQuestionDB(questionEditDialog: QuestionEditDialog) {
         if (questionEditDialog.oldQuestion == null) {
             addNewQuestion(questionEditDialog)
         } else {
@@ -97,7 +102,7 @@ class QuestionsPresenter(val view: IQuestionsView,
         question.answer = questionEditDialog.answer!!
         questionsAdapter.update(question)
         hideDialog(questionEditDialog)
-        updateQuestion(question)
+        updateQuestionDB(question)
     }
 
     private fun addNewQuestion(questionEditDialog: QuestionEditDialog) {
@@ -106,7 +111,7 @@ class QuestionsPresenter(val view: IQuestionsView,
         questionsAdapter.add(question)
         hideDialog(questionEditDialog)
         changeStatus()
-        insertQuestion(question)
+        insertQuestionDB(question)
     }
 
     fun removeQuestion(adapterPosition: Int) {
@@ -114,14 +119,14 @@ class QuestionsPresenter(val view: IQuestionsView,
         showSnackBar(question, adapterPosition)
         questions.remove(question)
         questionsAdapter.remove(question)
-        deleteQuestion(question)
+        deleteQuestionDB(question)
         changeStatus()
     }
 
     private fun recoverQuestion(question: Question, adapterPosition: Int) {
         questions.add(adapterPosition, question)
         questionsAdapter.add(question)
-        insertQuestion(question)
+        insertQuestionDB(question)
         changeStatus()
     }
 
@@ -147,35 +152,6 @@ class QuestionsPresenter(val view: IQuestionsView,
         return filteredModelList
     }
 
-    private fun fetchQuestionDataFromDB() {
-        val task = DatabaseGetQuestions(this)
-        task.execute(topicId)
-    }
-
-    private fun updateQuestion(question: Question) {
-        AsyncTask.execute({
-            run {
-                AppDatabase.getInstance(context)!!.questionDAO().updateQuestion(question)
-            }
-        })
-    }
-
-    private fun insertQuestion(question: Question) {
-        AsyncTask.execute({
-            run {
-                AppDatabase.getInstance(context)!!.questionDAO().insertQuestion(question)
-            }
-        })
-    }
-
-    private fun deleteQuestion(question: Question) {
-        AsyncTask.execute({
-            run {
-                AppDatabase.getInstance(context)!!.questionDAO().deleteQuestion(question)
-            }
-        })
-    }
-
     fun startLearning(): Boolean {
         if (allLearned()) showAlreadyLearnedToast()
         else {
@@ -191,7 +167,7 @@ class QuestionsPresenter(val view: IQuestionsView,
     }
 
     private fun showAlreadyLearnedToast() {
-        Toast.makeText(context, context.getText(R.string.already_learned), Toast.LENGTH_SHORT).show()
+        view.alreadyLearned()
     }
 
     private fun allLearned(): Boolean {
@@ -199,6 +175,46 @@ class QuestionsPresenter(val view: IQuestionsView,
             if (it.done == 0) return false
         })
         return true
+    }
+
+    private fun updateQuestionDB(question: Question) {
+        AsyncTask.execute({
+            run {
+                AppDatabase.getInstance(context)!!.questionDAO().updateQuestion(question)
+            }
+        })
+    }
+
+    private fun insertQuestionDB(question: Question) {
+        AsyncTask.execute({
+            run {
+                AppDatabase.getInstance(context)!!.questionDAO().insertQuestion(question)
+            }
+        })
+    }
+
+    private fun deleteQuestionDB(question: Question) {
+        AsyncTask.execute({
+            run {
+                AppDatabase.getInstance(context)!!.questionDAO().deleteQuestion(question)
+            }
+        })
+    }
+
+    private fun markTopicDoneDB() {
+        AsyncTask.execute({
+            run {
+                AppDatabase.getInstance(context)!!.topicDAO().markDone(topicId!!)
+            }
+        })
+    }
+
+    private fun markTopicUnDoneDB() {
+        AsyncTask.execute({
+            run {
+                AppDatabase.getInstance(context)!!.topicDAO().markUnDone(topicId!!)
+            }
+        })
     }
 
     companion object {
@@ -212,8 +228,8 @@ class QuestionsPresenter(val view: IQuestionsView,
 
             override fun onPostExecute(result: ArrayList<Question>?) {
                 questionsPresenter.questionsAdapter.addAll(result!!)
-                questionsPresenter.changeStatus()
                 questionsPresenter.questionsAdapter.notifyDataSetChanged()
+                questionsPresenter.changeStatus()
             }
         }
     }

@@ -8,10 +8,4 @@
     <item
         android:id="@+id/rename_topic"
         android:title="@string/rename"/>
-    <item
-        android:id="@+id/mark_done"
-        android:title="@string/mark_done" />
-    <item
-        android:id="@+id/mark_undone"
-        android:title="@string/mark_undone" />
 </menu>

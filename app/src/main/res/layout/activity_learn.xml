@@ -15,8 +15,8 @@
         android:layout_marginTop="8dp"
         android:maxLines="5"
         android:scrollbars="vertical"
-        android:textSize="14sp"
-        android:textStyle="bold|italic"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,16 +27,21 @@
         android:id="@+id/learnAnswer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:maxLines="20"
         android:scrollbars="vertical"
+        android:textAlignment="center"
         android:textSize="12sp"
         android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/btn_yes"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/learnQuestion"
+        app:layout_constraintVertical_bias="0.542"
         tools:text="Fusce lacinia odio ut mollis rhoncus. In eget mauris quis lorem iaculis feugiat nec ut orci. Ut tempus enim suscipit porta blandit. Mauris venenatis nisl dui, id efficitur erat feugiat vel. Phasellus convallis eget tortor eu vehicula. Pellentesque efficitur nisi id commodo lobortis. Sed sit amet gravida ante. In eget massa sit amet nisi venenatis laoreet quis ac mi. Aliquam erat volutpat. Nullam ornare, enim sed porttitor faucibus, ex augue auctor nulla, gravida dignissim elit tellus at diam. Phasellus et condimentum justo, vitae aliquet purus. Etiam at egestas sem. Nulla tincidunt tristique arcu ut tincidunt. Quisque quis lobortis justo.
 
 In sed imperdiet ipsum. Duis ex quam, lacinia at vehicula sit amet, interdum quis ante. Vestibulum non nunc neque. Etiam quis orci nec elit elementum accumsan. Nullam blandit finibus est sit amet ultricies. Duis dignissim odio dui, congue luctus sapien vehicula id. Etiam condimentum massa sed sapien mollis feugiat. Quisque consectetur, mi sit amet blandit suscipit, ante massa faucibus elit, ut consectetur erat ante sed metus. Aenean ullamcorper, purus et fringilla feugiat, sem lacus molestie nisi, a lacinia ex eros ac metus. Sed eget pretium nulla. Pellentesque justo diam, pulvinar id ornare ac, molestie eget risus.
@@ -75,7 +80,7 @@ Nam sodales vel purus sit amet sagittis. Nullam lobortis neque enim, sit amet pr
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textAllCaps="true"
-        android:textColor="@color/accent"
+        android:textColor="@color/primary"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -90,11 +95,10 @@ Nam sodales vel purus sit amet sagittis. Nullam lobortis neque enim, sit amet pr
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_question" />
+        app:srcCompat="@drawable/ic_question_mark" />
 
 </android.support.constraint.ConstraintLayout>

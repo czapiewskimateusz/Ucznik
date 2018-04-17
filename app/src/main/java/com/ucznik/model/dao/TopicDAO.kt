@@ -23,4 +23,10 @@ import com.ucznik.model.entities.Topic
 
     @Delete
     fun deleteTopic(topic: Topic)
+
+    @Query("update topic set done=1 where topicId= :topicId")
+    fun markDone(topicId: Long)
+
+    @Query("update topic set done=0 where topicId= :topicId")
+    fun markUnDone(topicId: Long)
 }

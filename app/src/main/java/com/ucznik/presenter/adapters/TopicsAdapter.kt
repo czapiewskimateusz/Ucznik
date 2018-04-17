@@ -25,8 +25,6 @@ class TopicsAdapter(private var topics: ArrayList<Topic>,
     interface TopicsAdapterCallback {
         fun deleteTopic(position: Int)
         fun showRenameDialog(position: Int)
-        fun markDone(position: Int)
-        fun markUndone(position: Int)
         fun showQuestions(topicId: Long)
     }
 
@@ -83,14 +81,6 @@ class TopicsAdapter(private var topics: ArrayList<Topic>,
                     renameTopic(position)
                     return@setOnMenuItemClickListener true
                 }
-                R.id.mark_done -> {
-                    markDone(position)
-                    return@setOnMenuItemClickListener true
-                }
-                R.id.mark_undone -> {
-                    markUndone(position)
-                    return@setOnMenuItemClickListener true
-                }
                 else -> return@setOnMenuItemClickListener false
             }
         })
@@ -98,14 +88,6 @@ class TopicsAdapter(private var topics: ArrayList<Topic>,
 
     private fun renameTopic(position: Int) {
        topicsAdapterCallback.showRenameDialog(position)
-    }
-
-    private fun markUndone(position: Int) {
-        topicsAdapterCallback.markUndone(position)
-    }
-
-    private fun markDone(position: Int) {
-       topicsAdapterCallback.markDone(position)
     }
 
     private fun removeTopic(position: Int) {

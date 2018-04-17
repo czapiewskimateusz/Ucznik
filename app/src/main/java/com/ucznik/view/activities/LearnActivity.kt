@@ -39,8 +39,8 @@ class LearnActivity : AppCompatActivity(), ILearnView {
     }
 
     override fun learningDone() {
-        questionMark.visibility = INVISIBLE
         learnAnswer.visibility = INVISIBLE
+        questionMark.visibility = INVISIBLE
         btn_yes.isEnabled = false
         btn_no.isEnabled = false
         learnQuestion.text = resources.getText(R.string.done_learning)

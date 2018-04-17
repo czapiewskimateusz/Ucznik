@@ -36,7 +36,6 @@
         android:inputType="textMultiLine"
         android:maxLines="15"
         android:scrollbars="vertical"
-        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/questionEt"
@@ -44,9 +43,9 @@
 
     <Button
         android:id="@+id/saveBtn"
-        android:layout_width="95dp"
-        android:layout_height="35dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="90dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="24dp"
         android:layout_marginEnd="64dp"
         android:background="@drawable/round_button"
         android:text="@string/save"
@@ -56,8 +55,8 @@
     <Button
         android:id="@+id/cancelBtn"
         android:layout_width="95dp"
-        android:layout_height="35dp"
-        android:layout_marginBottom="16dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="24dp"
         android:layout_marginStart="64dp"
         android:background="@drawable/round_button"
         android:text="@string/cancel"

@@ -25,7 +25,7 @@ class TopicsAdapter(private var topics: ArrayList<Topic>,
     interface TopicsAdapterCallback {
         fun deleteTopic(position: Int)
         fun showRenameDialog(position: Int)
-        fun showQuestions(topicId: Long)
+        fun startQuestionsActivity(topicId: Long)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TopicViewHolder {
@@ -63,7 +63,7 @@ class TopicsAdapter(private var topics: ArrayList<Topic>,
         })
 
         holder?.container?.setOnClickListener({
-           topicsAdapterCallback.showQuestions(topics[position].topicId)
+           topicsAdapterCallback.startQuestionsActivity(topics[position].topicId)
         })
     }
 

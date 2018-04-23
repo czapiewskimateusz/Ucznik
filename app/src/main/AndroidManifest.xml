@@ -16,14 +16,9 @@
         <activity
             android:name="com.ucznik.view.activities.LoginActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
-            android:name="com.ucznik.view.RegisterActivity"
+            android:name="com.ucznik.view.activities.RegisterActivity"
             android:label="@string/register"
             android:parentActivityName="com.ucznik.view.activities.LoginActivity"
             android:screenOrientation="portrait"
@@ -31,12 +26,25 @@
         <activity
             android:name="com.ucznik.view.activities.TopicsActivity"
             android:label="@string/topics"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeActionBar" />
         <activity
             android:name="com.ucznik.view.activities.QuestionsActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeActionBar"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name="com.ucznik.view.activities.LearnActivity"></activity>
+        <activity
+            android:name="com.ucznik.view.activities.LearnActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.ucznik.view.activities.SplashActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

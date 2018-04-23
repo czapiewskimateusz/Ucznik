@@ -16,7 +16,7 @@ import com.ucznik.presenter.TOPIC_ID_EXTRA
 import com.ucznik.ucznik.R
 import com.ucznik.view.dialogs.QuestionEditDialog
 import com.ucznik.view.interfaces.IQuestionsView
-import kotlinx.android.synthetic.main.activity_topic_detail.*
+import kotlinx.android.synthetic.main.activity_questions.*
 
 class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialog.QuestionEditDialogListener {
 
@@ -24,16 +24,11 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_topic_detail)
+        setContentView(R.layout.activity_questions)
 
         initRV()
         initFAB()
         questionPresenter.loadData(intent.getLongExtra(TOPIC_ID_EXTRA, -1))
-    }
-
-    override fun onDestroy() {
-        questionPresenter.onDestroy()
-        super.onDestroy()
     }
 
     override fun onRestart() {

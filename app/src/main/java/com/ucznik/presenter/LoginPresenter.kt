@@ -6,7 +6,7 @@ import android.content.Intent
 import android.text.TextUtils
 import com.ucznik.ucznik.R
 import com.ucznik.view.interfaces.ILoginView
-import com.ucznik.view.RegisterActivity
+import com.ucznik.view.activities.RegisterActivity
 import com.ucznik.view.activities.TopicsActivity
 
 

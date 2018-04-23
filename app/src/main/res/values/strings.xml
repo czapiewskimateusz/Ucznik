@@ -30,7 +30,7 @@
     <string name="learn_menu">Ucz się!</string>
     <string name="search_question_menu">Szukaj</string>
     <string name="question_done_mark_desc">Oznaczenie zakończenia pytania</string>
-    <string name="questions_done">NAUCZONO</string>
+    <string name="questions_done">Nauczono</string>
     <string name="deleted">Usunięto</string>
     <string name="rename">Zmień nazwę</string>
     <string name="question">Pytanie</string>
@@ -40,4 +40,5 @@
     <string name="know_question">umiem</string>
     <string name="done_learning">Gratuluacje! Nauka zakończona</string>
     <string name="already_learned">Nie ma niczego do nauki!</string>
+    <string name="question_mark_desc">Znak zapytania</string>
 </resources>

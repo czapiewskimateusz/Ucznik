@@ -15,6 +15,7 @@
         android:layout_marginTop="8dp"
         android:maxLines="5"
         android:scrollbars="vertical"
+        android:textAlignment="center"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,23 +55,29 @@ Nam sodales vel purus sit amet sagittis. Nullam lobortis neque enim, sit amet pr
         android:id="@+id/btn_no"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="32dp"
         android:layout_marginStart="32dp"
-        android:background="@color/red"
+        android:background="@drawable/round_button_red"
+        android:foreground="@drawable/ripple_red"
         android:text="@string/dont_know_question"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:focusable="true" />
 
     <Button
         android:id="@+id/btn_yes"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="32dp"
         android:layout_marginEnd="32dp"
-        android:background="@color/green"
+        android:background="@drawable/round_button_green"
+        android:foreground="@drawable/ripple_green"
         android:text="@string/know_question"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/learnStatus"
@@ -78,14 +85,15 @@ Nam sodales vel purus sit amet sagittis. Nullam lobortis neque enim, sit amet pr
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:textAllCaps="true"
-        android:textColor="@color/primary"
+        android:textColor="@color/accent"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="NAUCZONO 1/3" />
 
     <ImageView
         android:id="@+id/questionMark"
@@ -99,6 +107,7 @@ Nam sodales vel purus sit amet sagittis. Nullam lobortis neque enim, sit amet pr
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_question_mark" />
+        app:srcCompat="@drawable/ic_question_mark"
+        android:contentDescription="@string/question_mark_desc" />
 
 </android.support.constraint.ConstraintLayout>

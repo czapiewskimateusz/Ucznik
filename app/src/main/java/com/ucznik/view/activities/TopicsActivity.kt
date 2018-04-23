@@ -6,9 +6,6 @@ import android.support.v7.app.AppCompatActivity
 
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import com.ucznik.presenter.TopicsPresenter
 import com.ucznik.ucznik.R
 import com.ucznik.view.dialogs.RenameDialog
@@ -31,19 +28,6 @@ class TopicsActivity : AppCompatActivity(), RenameDialog.RenameDialogListener, I
     override fun onRestart() {
         topicPresenter.loadData()
         super.onRestart()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.topics_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.logout_menu -> topicPresenter.logout()
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onDialogPositiveClick(renameDialog: RenameDialog) {

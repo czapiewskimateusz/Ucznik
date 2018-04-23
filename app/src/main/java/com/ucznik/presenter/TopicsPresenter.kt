@@ -28,7 +28,7 @@ class TopicsPresenter(val view: ITopicsView,
 
 
     fun loadData() {
-        fetchTopicDataFromDB()
+        DatabaseGetTopics(this).execute()
     }
 
     fun logout() {
@@ -76,18 +76,14 @@ class TopicsPresenter(val view: ITopicsView,
         val deletedTopic = topics[position]
         topics.removeAt(position)
         topicsAdapter.notifyItemRemoved(position)
-        topicsAdapter.notifyItemRangeChanged(position, topics.size - 1)
+        topicsAdapter.notifyItemRangeChanged(position, topics.size)
         deleteTopicDB(deletedTopic)
     }
 
-    override fun showQuestions(topicId: Long) {
+    override fun startQuestionsActivity(topicId: Long) {
         val intent = Intent(context, QuestionsActivity::class.java)
         intent.putExtra(TOPIC_ID_EXTRA, topicId)
         context.startActivity(intent)
-    }
-
-    private fun fetchTopicDataFromDB() {
-       DatabaseGetTopics(this).execute()
     }
 
     private fun updateTopicDB(topic: Topic) {

@@ -28,10 +28,6 @@ class QuestionsPresenter(val view: IQuestionsView,
         DatabaseGetQuestions(this).execute(topicId)
     }
 
-    fun onDestroy() {
-        AppDatabase.destroyInstance()
-    }
-
     private fun changeStatus() {
         var done = 0.0
         questions.forEach { q -> if (q.done == 1) done++ }
@@ -57,9 +53,7 @@ class QuestionsPresenter(val view: IQuestionsView,
 
     private fun getQuestionById(id: Long): Question? {
         questions.forEach({
-            if (it.questionId == id) {
-                return it
-            }
+            if (it.questionId == id) return it
         })
         return null
     }
@@ -85,9 +79,8 @@ class QuestionsPresenter(val view: IQuestionsView,
     }
 
     fun updateQuestionDB(questionEditDialog: QuestionEditDialog) {
-        if (questionEditDialog.oldQuestion == null) {
-            addNewQuestion(questionEditDialog)
-        } else {
+        if (questionEditDialog.oldQuestion == null) addNewQuestion(questionEditDialog)
+        else {
             questions.forEach(action = { question ->
                 if (question.questionId == questionEditDialog.oldQuestion?.questionId) {
                     performUpdate(question, questionEditDialog)
@@ -153,10 +146,8 @@ class QuestionsPresenter(val view: IQuestionsView,
     }
 
     fun startLearning(): Boolean {
-        if (allLearned()) showAlreadyLearnedToast()
-        else {
-            startLearningActivity()
-        }
+        if (allLearned()) view.alreadyLearned()
+        else startLearningActivity()
         return true
     }
 
@@ -164,10 +155,6 @@ class QuestionsPresenter(val view: IQuestionsView,
         val intent = Intent(context, LearnActivity::class.java)
         intent.putExtra(TOPIC_ID_EXTRA, topicId)
         context.startActivity(intent)
-    }
-
-    private fun showAlreadyLearnedToast() {
-        view.alreadyLearned()
     }
 
     private fun allLearned(): Boolean {
@@ -218,16 +205,16 @@ class QuestionsPresenter(val view: IQuestionsView,
     }
 
     companion object {
-        class DatabaseGetQuestions(private val questionsPresenter: QuestionsPresenter) : AsyncTask<Long, Int, ArrayList<Question>>() {
+        class DatabaseGetQuestions(private val questionsPresenter: QuestionsPresenter) : AsyncTask<Long, Int, List<Question>>() {
 
-            override fun doInBackground(vararg topicId: Long?): ArrayList<Question> {
-                questionsPresenter.questions.clear()
-                questionsPresenter.questions.addAll(AppDatabase.getInstance(questionsPresenter.context)!!.questionDAO().getAllQuestions(topicId[0]!!))
-                return questionsPresenter.questions
+            override fun doInBackground(vararg topicId: Long?): List<Question> {
+                return  AppDatabase.getInstance(questionsPresenter.context)!!.questionDAO().getAllQuestions(topicId[0]!!)
             }
 
-            override fun onPostExecute(result: ArrayList<Question>?) {
-                questionsPresenter.questionsAdapter.addAll(result!!)
+            override fun onPostExecute(result: List<Question>?) {
+                questionsPresenter.questions.clear()
+                questionsPresenter.questions.addAll(result!!)
+                questionsPresenter.questionsAdapter.addAll(result)
                 questionsPresenter.questionsAdapter.notifyDataSetChanged()
                 questionsPresenter.changeStatus()
             }

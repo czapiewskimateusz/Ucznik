@@ -2,8 +2,10 @@ package com.ucznik.view.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.view.animation.AnimationUtils
 import com.ucznik.model.entities.Question
 import com.ucznik.presenter.LearnPresenter
 import com.ucznik.presenter.TOPIC_ID_EXTRA
@@ -47,16 +49,35 @@ class LearnActivity : AppCompatActivity(), ILearnView {
     }
 
     override fun displayQuestion(question: Question) {
+        setTextSize(question.question)
         learnQuestion.text = question.question
         learnAnswer.text = question.answer
+        learnQuestion.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
         btn_no.isEnabled = true
         btn_yes.text = resources.getText(R.string.know_question)
     }
 
+    private fun setTextSize(question: String) {
+        learnAnswer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.0f)
+        when {
+            question.length < 200 -> learnAnswer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18.0f)
+            question.length < 600 -> learnAnswer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14.0f)
+        }
+    }
+
     override fun showAnswer() {
+        questionMark.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out))
+        learnAnswer.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in))
         questionMark.visibility = INVISIBLE
         learnAnswer.visibility = VISIBLE
+
         btn_no.isEnabled = false
         btn_yes.text = "OK"
+    }
+
+    override fun hideAnswer() {
+        learnAnswer.visibility = INVISIBLE
+        questionMark.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in))
+        questionMark.visibility = VISIBLE
     }
 }

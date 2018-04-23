@@ -10,5 +10,6 @@ interface ILearnView {
     fun learningDone()
     fun displayQuestion(question: Question)
     fun showAnswer()
+    fun hideAnswer()
 
 }

@@ -78,6 +78,7 @@ class QuestionsAdapter(private val questions: ArrayList<Question>,
     }
 
     fun addAll(questions: List<Question>) {
+        sortedList.clear()
         sortedList.addAll(questions)
     }
 
@@ -144,9 +145,7 @@ class QuestionsAdapter(private val questions: ArrayList<Question>,
         private fun getQuestionById(id: Long): Question {
             var question: Question? = null
             questions.forEach({
-                if (it.questionId == id) {
-                    question = it
-                }
+                if (it.questionId == id) question = it
             })
             return question!!
         }

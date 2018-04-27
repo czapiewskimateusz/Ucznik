@@ -28,8 +28,8 @@ class TopicsAdapter(private var topics: ArrayList<Topic>,
         fun startQuestionsActivity(topicId: Long)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TopicViewHolder {
-        val v = LayoutInflater.from(parent?.context).inflate(R.layout.topic_item, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopicViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.topic_item, parent, false)
         return TopicViewHolder(v)
     }
 
@@ -37,8 +37,8 @@ class TopicsAdapter(private var topics: ArrayList<Topic>,
         return topics.size
     }
 
-    override fun onBindViewHolder(holder: TopicViewHolder?, position: Int) {
-        holder?.topicName?.text = topics[position].name
+    override fun onBindViewHolder(holder: TopicViewHolder, position: Int) {
+        holder.topicName.text = topics[position].name
         setDoneMark(position, holder)
         setClickListener(holder, position)
     }

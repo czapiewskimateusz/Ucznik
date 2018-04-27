@@ -129,7 +129,6 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) questionsFAB.hide()
                 else if (newState == RecyclerView.SCROLL_STATE_IDLE) questionsFAB.show()
             }
-
         })
     }
 }

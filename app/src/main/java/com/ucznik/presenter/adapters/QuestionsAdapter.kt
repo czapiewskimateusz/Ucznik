@@ -52,8 +52,8 @@ class QuestionsAdapter(private val questions: ArrayList<Question>,
         }
     })
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): QuestionViewHolder {
-        val v = LayoutInflater.from(parent?.context).inflate(R.layout.question_item, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.question_item, parent, false)
         return QuestionViewHolder(v)
     }
 
@@ -61,9 +61,9 @@ class QuestionsAdapter(private val questions: ArrayList<Question>,
         return sortedList.size()
     }
 
-    override fun onBindViewHolder(holder: QuestionViewHolder?, position: Int) {
-        holder?.questionTV?.text = sortedList[position].question
-        holder?.id = sortedList[position].questionId
+    override fun onBindViewHolder(holder: QuestionViewHolder, position: Int) {
+        holder.questionTV.text = sortedList[position].question
+        holder.id = sortedList[position].questionId
         setDoneMark(position, holder)
     }
 

@@ -10,6 +10,7 @@ import android.arch.persistence.room.ForeignKey.CASCADE
 data class Question(var topicId: Long,
                     var question: String,
                     var answer: String,
+                    var image: String?,
                     var done: Int){
 
     @PrimaryKey(autoGenerate = true)

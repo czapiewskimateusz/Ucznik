@@ -16,7 +16,7 @@ import com.ucznik.presenter.adapters.TopicsAdapter
  * Created by Mateusz Czapiewski on 24.02.2018.
  */
 
-@Database(entities = [(Topic::class), (Question::class)], version = 2, exportSchema = false)
+@Database(entities = [(Topic::class), (Question::class)], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun topicDAO(): TopicDAO

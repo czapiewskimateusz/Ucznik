@@ -1,12 +1,13 @@
 package com.ucznik.presenter
 
-import android.app.FragmentTransaction
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.AsyncTask
 import android.support.design.widget.Snackbar
 import android.support.v4.app.FragmentActivity
+import android.util.Base64
 import com.ucznik.model.AppDatabase
 import com.ucznik.model.entities.Question
 import com.ucznik.presenter.adapters.QuestionsAdapter
@@ -14,6 +15,8 @@ import com.ucznik.ucznik.R
 import com.ucznik.view.activities.LearnActivity
 import com.ucznik.view.dialogs.QuestionEditDialog
 import com.ucznik.view.interfaces.IQuestionsView
+import java.io.ByteArrayOutputStream
+
 
 class QuestionsPresenter(val view: IQuestionsView,
                          private val context: Context,
@@ -65,17 +68,11 @@ class QuestionsPresenter(val view: IQuestionsView,
     fun showDialog(question: Question?) {
         val questionEditDialog = QuestionEditDialog()
         questionEditDialog.oldQuestion = question
-        val transaction = activity.supportFragmentManager.beginTransaction()
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        transaction.add(android.R.id.content, questionEditDialog).addToBackStack("dialog").commit()
+        questionEditDialog.show(activity.supportFragmentManager,"edit_q")
     }
 
     fun hideDialog(questionEditDialog: QuestionEditDialog) {
-        val fragmentManager = activity.supportFragmentManager
-        val transaction = fragmentManager.beginTransaction()
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-        transaction.remove(questionEditDialog).commit()
-        fragmentManager.popBackStack()
+       questionEditDialog.dismiss()
     }
 
     fun updateQuestionDB(questionEditDialog: QuestionEditDialog) {
@@ -93,18 +90,29 @@ class QuestionsPresenter(val view: IQuestionsView,
     private fun performUpdate(question: Question, questionEditDialog: QuestionEditDialog) {
         question.question = questionEditDialog.question!!
         question.answer = questionEditDialog.answer!!
+        if (questionEditDialog.bitmap != null) question.image = encodeToBase64(questionEditDialog.bitmap)
+        else question.image = null
         questionsAdapter.update(question)
         hideDialog(questionEditDialog)
         updateQuestionDB(question)
     }
 
     private fun addNewQuestion(questionEditDialog: QuestionEditDialog) {
-        val question = Question(topicId!!, questionEditDialog.question!!, questionEditDialog.answer!!, 0)
+        val encodedImageString = encodeToBase64(questionEditDialog.bitmap)
+        val question = Question(topicId!!, questionEditDialog.question!!, questionEditDialog.answer!!,encodedImageString,0)
         questions.add(question)
         questionsAdapter.add(question)
         hideDialog(questionEditDialog)
         changeStatus()
         insertQuestionDB(question)
+    }
+
+    private fun encodeToBase64(bitmap: Bitmap?): String? {
+        if (bitmap == null) return null
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, stream)
+        val b = stream.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
     }
 
     fun removeQuestion(adapterPosition: Int) {

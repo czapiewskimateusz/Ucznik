@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/cardview_dark_background"
     android:clickable="true"
-    android:visibility="visible"
-    android:focusable="true">
+    android:focusable="true"
+    android:visibility="visible">
 
     <EditText
         android:id="@+id/questionEt"
@@ -15,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:hint="@string/question"
         android:inputType="textMultiLine"
         android:maxLines="3"
@@ -46,23 +47,47 @@
         android:id="@+id/saveBtn"
         android:layout_width="90dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/round_button"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/photoAnswer" />
 
     <Button
         android:id="@+id/cancelBtn"
         android:layout_width="95dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="24dp"
         android:layout_marginStart="32dp"
         android:background="@drawable/round_button"
         android:text="@string/cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/saveBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/saveBtn"
         app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/addImage"
+        android:layout_width="75dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/saveBtn"
+        app:layout_constraintStart_toEndOf="@+id/cancelBtn"
+        app:layout_constraintTop_toTopOf="@+id/saveBtn"
+        app:srcCompat="@drawable/ic_add_photo" />
+
+    <ImageView
+        android:id="@+id/photoAnswer"
+        android:layout_width="250dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/photo_answer_desc"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/addImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answerEt" />
 </android.support.constraint.ConstraintLayout>
+

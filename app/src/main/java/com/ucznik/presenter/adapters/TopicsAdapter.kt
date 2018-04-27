@@ -99,5 +99,7 @@ class TopicsAdapter(private var topics: ArrayList<Topic>,
         val container: CardView = itemView.topicContainer
         val doneIV: ImageView = itemView.doneIV
         val topicOptionsIV: ImageView = itemView.topicOptionsIV
+
+
     }
 }

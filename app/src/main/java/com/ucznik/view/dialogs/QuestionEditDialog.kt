@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.question_dialog.*
 import kotlinx.android.synthetic.main.question_dialog.view.*
 import java.io.IOException
 import android.graphics.BitmapFactory
+import android.os.AsyncTask
 import android.util.Base64
 import android.view.View.GONE
 
@@ -54,13 +55,7 @@ class QuestionEditDialog : DialogFragment() {
     private fun fillWithData() {
         questionEt?.setText(oldQuestion?.question)
         answerEt?.setText(oldQuestion?.answer)
-        if (oldQuestion?.image != null) decodeFromBase64()
-    }
-
-    private fun decodeFromBase64() {
-        val byteArray = Base64.decode(oldQuestion?.image, Base64.DEFAULT)
-        bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-        loadImage()
+        if (oldQuestion?.image != null) loadImage(oldQuestion?.image!!)
     }
 
     override fun onAttach(context: Context?) {
@@ -98,18 +93,25 @@ class QuestionEditDialog : DialogFragment() {
             val uri = data.data
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver, uri)
-                loadImage()
+                loadImage(bitmap!!)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
     }
 
-    private fun loadImage() {
+    private fun loadImage(bitmap: Bitmap) {
         val options = RequestOptions()
         options.fitCenter()
         photoAnswer.visibility = View.VISIBLE
         Glide.with(context!!).load(bitmap).apply(options).into(photoAnswer)
+    }
+
+    private fun loadImage(path: String) {
+        val options = RequestOptions()
+        options.fitCenter()
+        photoAnswer.visibility = View.VISIBLE
+        Glide.with(context!!).load(path).apply(options).into(photoAnswer)
     }
 
 }

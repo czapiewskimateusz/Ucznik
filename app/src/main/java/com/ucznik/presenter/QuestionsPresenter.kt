@@ -1,13 +1,13 @@
 package com.ucznik.presenter
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.AsyncTask
 import android.support.design.widget.Snackbar
 import android.support.v4.app.FragmentActivity
-import android.util.Base64
 import com.ucznik.model.AppDatabase
 import com.ucznik.model.entities.Question
 import com.ucznik.presenter.adapters.QuestionsAdapter
@@ -15,7 +15,13 @@ import com.ucznik.ucznik.R
 import com.ucznik.view.activities.LearnActivity
 import com.ucznik.view.dialogs.QuestionEditDialog
 import com.ucznik.view.interfaces.IQuestionsView
-import java.io.ByteArrayOutputStream
+import android.content.ContextWrapper
+import android.net.Uri
+import android.util.Log
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.util.*
 
 
 class QuestionsPresenter(val view: IQuestionsView,
@@ -90,16 +96,30 @@ class QuestionsPresenter(val view: IQuestionsView,
     private fun performUpdate(question: Question, questionEditDialog: QuestionEditDialog) {
         question.question = questionEditDialog.question!!
         question.answer = questionEditDialog.answer!!
-        if (questionEditDialog.bitmap != null) question.image = encodeToBase64(questionEditDialog.bitmap)
-        else question.image = null
+        if (questionEditDialog.bitmap != null){
+            try {
+                val file = File(question.image)
+                file.delete()
+            } catch (e:NullPointerException){}
+            question.image = saveToFile(questionEditDialog.bitmap)
+            Log.d("PATH",question.image)
+        }
+        else{
+            try {
+                val file = File(question.image)
+                file.delete()
+            } catch (e:NullPointerException){}
+            question.image = null
+        }
         questionsAdapter.update(question)
         hideDialog(questionEditDialog)
         updateQuestionDB(question)
     }
 
     private fun addNewQuestion(questionEditDialog: QuestionEditDialog) {
-        val encodedImageString = encodeToBase64(questionEditDialog.bitmap)
-        val question = Question(topicId!!, questionEditDialog.question!!, questionEditDialog.answer!!,encodedImageString,0)
+        val path = saveToFile(questionEditDialog.bitmap)
+        Log.d("PATH",path)
+        val question = Question(topicId!!, questionEditDialog.question!!, questionEditDialog.answer!!,path,0)
         questions.add(question)
         questionsAdapter.add(question)
         hideDialog(questionEditDialog)
@@ -107,12 +127,22 @@ class QuestionsPresenter(val view: IQuestionsView,
         insertQuestionDB(question)
     }
 
-    private fun encodeToBase64(bitmap: Bitmap?): String? {
+    private fun saveToFile(bitmap: Bitmap?):String? {
         if (bitmap == null) return null
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, stream)
-        val b = stream.toByteArray()
-        return Base64.encodeToString(b, Base64.DEFAULT)
+        val wrapper = ContextWrapper(context)
+        var file = wrapper.getDir("Images",MODE_PRIVATE)
+        val c = Calendar.getInstance()
+        file = File(file,"" + c.get(Calendar.MILLISECOND) + ".jpg")
+        return try{
+            val stream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG,85,stream)
+            stream.flush()
+            stream.close()
+            Uri.parse(file.absolutePath).toString()
+        } catch (e:IOException){
+            e.printStackTrace()
+            null
+        }
     }
 
     fun removeQuestion(adapterPosition: Int) {

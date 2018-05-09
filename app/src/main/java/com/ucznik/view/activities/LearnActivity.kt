@@ -3,6 +3,7 @@ package com.ucznik.view.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.util.TypedValue
 import android.view.View.*
 import android.view.animation.AnimationUtils
@@ -14,9 +15,10 @@ import com.ucznik.presenter.TOPIC_ID_EXTRA
 import com.ucznik.ucznik.R
 import com.ucznik.view.interfaces.ILearnView
 import kotlinx.android.synthetic.main.activity_learn.*
+import com.github.chrisbanes.photoview.PhotoView
+
 
 class LearnActivity : AppCompatActivity(), ILearnView {
-
     private val learnPresenter = LearnPresenter(this, this)
     private var questionType = 0
 
@@ -30,14 +32,27 @@ class LearnActivity : AppCompatActivity(), ILearnView {
 
     private fun initButtons() {
         btn_no.setOnClickListener({
-            learnPresenter.doNotKnow()
+            learnPresenter.doNotKnowAnswer()
         })
         btn_yes.setOnClickListener({
             Glide.with(this).clear(photoAnswer)
-            learnPresenter.know(btn_yes.text.toString())
+            learnPresenter.knowAnswer(btn_yes.text.toString())
             questionMark.visibility = VISIBLE
             learnAnswer.visibility = GONE
         })
+        photoAnswer.setOnClickListener({
+            val mDialog = buildPreviewDialog()
+            mDialog.show()
+        })
+    }
+
+    private fun buildPreviewDialog(): AlertDialog {
+        val mBuilder = AlertDialog.Builder(this)
+        val mView = layoutInflater.inflate(R.layout.dialog_preview_image, null)
+        val imagePreview: PhotoView = mView.findViewById(R.id.imagePreview)
+        imagePreview.setImageDrawable(photoAnswer.drawable)
+        mBuilder.setView(mView)
+        return mBuilder.create()
     }
 
     override fun updateStatus(status: String) {
@@ -45,9 +60,6 @@ class LearnActivity : AppCompatActivity(), ILearnView {
     }
 
     override fun learningDone() {
-        learnAnswer.visibility = GONE
-        photoAnswer.visibility = GONE
-        questionMark.visibility = INVISIBLE
         btn_yes.isEnabled = false
         btn_no.isEnabled = false
         learnQuestion.text = resources.getText(R.string.done_learning)
@@ -57,15 +69,19 @@ class LearnActivity : AppCompatActivity(), ILearnView {
         setTextSize(question.question)
         learnQuestion.text = question.question
         learnAnswer.text = question.answer
+        setType(question)
+        learnQuestion.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
+        btn_no.isEnabled = true
+        btn_yes.text = resources.getText(R.string.know_question)
+    }
+
+    private fun setType(question: Question) {
         questionType = if (question.image != null) {
             loadImage(question.image!!)
             1
         } else {
             0
         }
-        learnQuestion.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
-        btn_no.isEnabled = true
-        btn_yes.text = resources.getText(R.string.know_question)
     }
 
     private fun setTextSize(question: String) {
@@ -77,10 +93,12 @@ class LearnActivity : AppCompatActivity(), ILearnView {
     }
 
     override fun showAnswer() {
-        if (questionType == 1) photoAnswer.visibility = VISIBLE
         questionMark.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out))
         learnAnswer.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in))
-        photoAnswer.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in))
+        if (questionType == 1) {
+            photoAnswer.visibility = VISIBLE
+            photoAnswer.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in))
+        }
         questionMark.visibility = INVISIBLE
         learnAnswer.visibility = VISIBLE
         btn_no.isEnabled = false
@@ -94,7 +112,7 @@ class LearnActivity : AppCompatActivity(), ILearnView {
         questionMark.visibility = VISIBLE
     }
 
-    private fun loadImage(path:String) {
+    private fun loadImage(path: String) {
         val options = RequestOptions()
         options.fitCenter()
         Glide.with(this).load(path).apply(options).into(photoAnswer)

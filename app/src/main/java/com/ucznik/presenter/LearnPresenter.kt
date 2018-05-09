@@ -11,7 +11,7 @@ class LearnPresenter(val view: ILearnView,
 
     private var questions = ArrayList<Question>()
     private var questionsLearned = ArrayList<Question>()
-    private var numberOfQuestions: Int? = null
+    private var numberOfQuestions = 0
     var topicId: Long? = null
 
     fun loadQuestions(topicId: Long) {
@@ -40,27 +40,31 @@ class LearnPresenter(val view: ILearnView,
         questions.removeAll(questionsLearned)
     }
 
-    fun doNotKnow() {
+    fun doNotKnowAnswer() {
         view.showAnswer()
     }
 
-    fun know(ok: String) {
+    fun knowAnswer(ok: String) {
         if (ok == "OK") {
             view.hideAnswer()
             showNextQuestion()
         }
         else if (questions.size > 0) {
-            questionsLearned.add(questions[0])
-            val question = questions[0]
-            question.done = 1
-            updateQuestion(question)
-            questions.removeAt(0)
-            view.updateStatus("Umiem ${questionsLearned.size}/$numberOfQuestions")
+            updateLearned()
+            view.updateStatus("Nauczono ${questionsLearned.size}/$numberOfQuestions")
             showNextQuestion()
         }
     }
 
-    private fun updateQuestion(question: Question) {
+    private fun updateLearned() {
+        questionsLearned.add(questions[0])
+        val question = questions[0]
+        question.done = 1
+        updateQuestionDB(question)
+        questions.removeAt(0)
+    }
+
+    private fun updateQuestionDB(question: Question) {
         AsyncTask.execute({
             run {
                 AppDatabase.getInstance(context)!!.questionDAO().updateQuestion(question)
@@ -78,7 +82,7 @@ class LearnPresenter(val view: ILearnView,
             }
 
             override fun onPostExecute(result: ArrayList<Question>?) {
-                learnPresenter.numberOfQuestions = result?.size
+                learnPresenter.numberOfQuestions = result?.size ?: 0
                 learnPresenter.splitToLearned()
                 if (learnPresenter.questions.size != 0) learnPresenter.startLearning()
             }

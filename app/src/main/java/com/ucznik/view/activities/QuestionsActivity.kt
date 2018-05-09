@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
@@ -100,7 +101,9 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
     }
 
     override fun alreadyLearned() {
-        Snackbar.make(findViewById(R.id.coordinatorLayout),this.getText(R.string.already_learned),Snackbar.LENGTH_LONG).show()
+        val snackbar = Snackbar.make(findViewById(R.id.coordinatorLayout), this.getText(R.string.already_learned), Snackbar.LENGTH_LONG)
+        snackbar.view.setBackgroundColor(ContextCompat.getColor(this, R.color.primary))
+        snackbar.show()
     }
 
     private fun initRV() {

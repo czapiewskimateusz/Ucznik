@@ -36,7 +36,7 @@
         android:layout_marginTop="16dp"
         android:hint="@string/answer"
         android:inputType="textMultiLine"
-        android:maxLines="15"
+        android:maxLines="10"
         android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

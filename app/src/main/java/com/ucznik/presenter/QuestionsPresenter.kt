@@ -17,7 +17,7 @@ import com.ucznik.view.dialogs.QuestionEditDialog
 import com.ucznik.view.interfaces.IQuestionsView
 import android.content.ContextWrapper
 import android.net.Uri
-import android.util.Log
+import android.support.v4.content.ContextCompat
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -96,29 +96,35 @@ class QuestionsPresenter(val view: IQuestionsView,
     private fun performUpdate(question: Question, questionEditDialog: QuestionEditDialog) {
         question.question = questionEditDialog.question!!
         question.answer = questionEditDialog.answer!!
-        if (questionEditDialog.bitmap != null){
-            try {
-                val file = File(question.image)
-                file.delete()
-            } catch (e:NullPointerException){}
-            question.image = saveToFile(questionEditDialog.bitmap)
-            Log.d("PATH",question.image)
-        }
-        else{
-            try {
-                val file = File(question.image)
-                file.delete()
-            } catch (e:NullPointerException){}
-            question.image = null
-        }
+
+        if (questionEditDialog.bitmap != null) replaceImage(question, questionEditDialog)
+        else deleteImage(question)
+
+        updateQuestionDB(question)
         questionsAdapter.update(question)
         hideDialog(questionEditDialog)
-        updateQuestionDB(question)
+    }
+
+    private fun deleteImage(question: Question) {
+        try {
+            val file = File(question.image)
+            file.delete()
+        } catch (e: NullPointerException) {
+        }
+        question.image = null
+    }
+
+    private fun replaceImage(question: Question, questionEditDialog: QuestionEditDialog) {
+        try {
+            val file = File(question.image)
+            file.delete()
+        } catch (e: NullPointerException) {
+        }
+        question.image = saveToFile(questionEditDialog.bitmap)
     }
 
     private fun addNewQuestion(questionEditDialog: QuestionEditDialog) {
         val path = saveToFile(questionEditDialog.bitmap)
-        Log.d("PATH",path)
         val question = Question(topicId!!, questionEditDialog.question!!, questionEditDialog.answer!!,path,0)
         questions.add(question)
         questionsAdapter.add(question)
@@ -129,20 +135,30 @@ class QuestionsPresenter(val view: IQuestionsView,
 
     private fun saveToFile(bitmap: Bitmap?):String? {
         if (bitmap == null) return null
-        val wrapper = ContextWrapper(context)
-        var file = wrapper.getDir("Images",MODE_PRIVATE)
-        val c = Calendar.getInstance()
-        file = File(file,"" + c.get(Calendar.MILLISECOND) + ".jpg")
+        val file = initFile()
         return try{
-            val stream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG,85,stream)
-            stream.flush()
-            stream.close()
-            Uri.parse(file.absolutePath).toString()
+            compress(file!!, bitmap)
         } catch (e:IOException){
             e.printStackTrace()
             null
         }
+    }
+
+    private fun initFile(): File? {
+        val wrapper = ContextWrapper(context)
+        var file = wrapper.getDir("Images", MODE_PRIVATE)
+        val c = Calendar.getInstance()
+        val name = c.get(Calendar.MILLISECOND).toString() + "_" + c.get(Calendar.DATE).toString()
+        file = File(file, "$name.jpg")
+        return file
+    }
+
+    private fun compress(file: File, bitmap: Bitmap): String {
+        val stream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, stream)
+        stream.flush()
+        stream.close()
+        return Uri.parse(file.absolutePath).toString()
     }
 
     fun removeQuestion(adapterPosition: Int) {
@@ -162,9 +178,11 @@ class QuestionsPresenter(val view: IQuestionsView,
     }
 
     private fun showSnackBar(question: Question, position: Int) {
-        Snackbar.make(activity.currentFocus, question.question, Snackbar.LENGTH_LONG).setAction(context.getString(R.string.cancel), {
+       val snackbar = Snackbar.make(activity.currentFocus, question.question, Snackbar.LENGTH_LONG).setAction(context.getString(R.string.cancel), {
             recoverQuestion(question, position)
-        }).show()
+        })
+        snackbar.view.setBackgroundColor(ContextCompat.getColor(context,R.color.primary))
+        snackbar.show()
     }
 
     fun onQueryTextChange(query: String?) {

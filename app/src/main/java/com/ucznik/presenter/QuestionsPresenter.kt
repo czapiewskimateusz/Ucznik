@@ -18,6 +18,7 @@ import com.ucznik.view.interfaces.IQuestionsView
 import android.content.ContextWrapper
 import android.net.Uri
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -74,11 +75,11 @@ class QuestionsPresenter(val view: IQuestionsView,
     fun showDialog(question: Question?) {
         val questionEditDialog = QuestionEditDialog()
         questionEditDialog.oldQuestion = question
-        questionEditDialog.show(activity.supportFragmentManager,"edit_q")
+        questionEditDialog.show(activity.supportFragmentManager, "edit_q")
     }
 
     fun hideDialog(questionEditDialog: QuestionEditDialog) {
-       questionEditDialog.dismiss()
+        questionEditDialog.dismiss()
     }
 
     fun updateQuestionDB(questionEditDialog: QuestionEditDialog) {
@@ -109,6 +110,7 @@ class QuestionsPresenter(val view: IQuestionsView,
         try {
             val file = File(question.image)
             file.delete()
+            Log.d("DELETED IMAGE:",question.image)
         } catch (e: NullPointerException) {
         }
         question.image = null
@@ -125,7 +127,7 @@ class QuestionsPresenter(val view: IQuestionsView,
 
     private fun addNewQuestion(questionEditDialog: QuestionEditDialog) {
         val path = saveToFile(questionEditDialog.bitmap)
-        val question = Question(topicId!!, questionEditDialog.question!!, questionEditDialog.answer!!,path,0)
+        val question = Question(topicId!!, questionEditDialog.question!!, questionEditDialog.answer!!, path, 0)
         questions.add(question)
         questionsAdapter.add(question)
         hideDialog(questionEditDialog)
@@ -133,12 +135,12 @@ class QuestionsPresenter(val view: IQuestionsView,
         insertQuestionDB(question)
     }
 
-    private fun saveToFile(bitmap: Bitmap?):String? {
+    private fun saveToFile(bitmap: Bitmap?): String? {
         if (bitmap == null) return null
         val file = initFile()
-        return try{
+        return try {
             compress(file!!, bitmap)
-        } catch (e:IOException){
+        } catch (e: IOException) {
             e.printStackTrace()
             null
         }
@@ -178,10 +180,16 @@ class QuestionsPresenter(val view: IQuestionsView,
     }
 
     private fun showSnackBar(question: Question, position: Int) {
-       val snackbar = Snackbar.make(activity.currentFocus, question.question, Snackbar.LENGTH_LONG).setAction(context.getString(R.string.cancel), {
+        var remove = true
+        val snackbar = Snackbar.make(activity.currentFocus, question.question, Snackbar.LENGTH_LONG).setAction(context.getString(R.string.cancel), {
             recoverQuestion(question, position)
+            remove = false
         })
-        snackbar.view.setBackgroundColor(ContextCompat.getColor(context,R.color.primary))
+        snackbar.addCallback(object : Snackbar.Callback() {
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                if (remove) deleteImage(question)
+            }
+        })
         snackbar.show()
     }
 
@@ -264,7 +272,7 @@ class QuestionsPresenter(val view: IQuestionsView,
         class DatabaseGetQuestions(private val questionsPresenter: QuestionsPresenter) : AsyncTask<Long, Int, List<Question>>() {
 
             override fun doInBackground(vararg topicId: Long?): List<Question> {
-                return  AppDatabase.getInstance(questionsPresenter.context)!!.questionDAO().getAllQuestions(topicId[0]!!)
+                return AppDatabase.getInstance(questionsPresenter.context)!!.questionDAO().getAllQuestions(topicId[0]!!)
             }
 
             override fun onPostExecute(result: List<Question>?) {

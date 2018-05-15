@@ -1,12 +1,12 @@
 package com.ucznik.view.activities
 
-
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.util.TypedValue
 import android.view.View.*
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.ucznik.model.entities.Question
@@ -41,8 +41,7 @@ class LearnActivity : AppCompatActivity(), ILearnView {
             learnAnswer.visibility = GONE
         })
         photoAnswer.setOnClickListener({
-            val mDialog = buildPreviewDialog()
-            mDialog.show()
+            buildPreviewDialog().show()
         })
     }
 
@@ -62,7 +61,20 @@ class LearnActivity : AppCompatActivity(), ILearnView {
     override fun learningDone() {
         btn_yes.isEnabled = false
         btn_no.isEnabled = false
-        learnQuestion.text = resources.getText(R.string.done_learning)
+        buildLearningDoneDialog().show()
+    }
+
+    private fun buildLearningDoneDialog(): AlertDialog {
+        val mBuilder = AlertDialog.Builder(this)
+        val mView = layoutInflater.inflate(R.layout.dialog_learning_done,null)
+        val imageView:ImageView = mView.findViewById(R.id.gifIV)
+        Glide.with(this).asGif().load(R.drawable.celebrate).into(imageView)
+        mBuilder.setView(mView)
+        mBuilder.setTitle(R.string.done_learning)
+        mBuilder.setOnDismissListener {
+            finish()
+        }
+        return mBuilder.create()
     }
 
     override fun displayQuestion(question: Question) {

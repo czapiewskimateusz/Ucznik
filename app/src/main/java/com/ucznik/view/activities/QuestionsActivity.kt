@@ -102,7 +102,6 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
 
     override fun alreadyLearned() {
         val snackbar = Snackbar.make(findViewById(R.id.coordinatorLayout), this.getText(R.string.already_learned), Snackbar.LENGTH_LONG)
-        snackbar.view.setBackgroundColor(ContextCompat.getColor(this, R.color.primary))
         snackbar.show()
     }
 

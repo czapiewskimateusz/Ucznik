@@ -28,7 +28,7 @@ class LearnPresenter(val view: ILearnView,
     }
 
     private fun startLearning() {
-        view.updateStatus("Nauczono ${questionsLearned.size}/$numberOfQuestions")
+        view.updateStatus("${questionsLearned.size}/$numberOfQuestions")
         questions.shuffle()
         view.displayQuestion(questions[0])
     }
@@ -51,7 +51,7 @@ class LearnPresenter(val view: ILearnView,
         }
         else if (questions.size > 0) {
             updateLearned()
-            view.updateStatus("Nauczono ${questionsLearned.size}/$numberOfQuestions")
+            view.updateStatus("${questionsLearned.size}/$numberOfQuestions")
             showNextQuestion()
         }
     }

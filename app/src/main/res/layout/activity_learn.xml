@@ -22,23 +22,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btn_yes" />
 
-    <TextView
-        android:id="@+id/learnQuestion"
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:maxLines="5"
-        android:scrollbars="vertical"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/learnStatus"
-        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vitae ultrices ligula. Aliquam ac orci tortor. Nunc mattis enim ultrices erat commodo commodo. Vivamus in mauris id lectus finibus auctor id quis nisi. Sed pulvinar justo vel ligula dapibus, quis maximus dui tempor. Aenean efficitur pharetra dolor, et mattis tortor ornare eget. Etiam non libero accumsan mi interdum bibendum id et metus. Nullam dolor risus, rhoncus ac pharetra eget, blandit vulputate neque." />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/learnQuestion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:maxLines="5"
+            android:scrollbars="vertical"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/learnStatus"
+            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vitae ultrices ligula. Aliquam ac orci tortor. Nunc mattis enim ultrices erat commodo commodo. Vivamus in mauris id lectus finibus auctor id quis nisi. Sed pulvinar justo vel ligula dapibus, quis maximus dui tempor. Aenean efficitur pharetra dolor, et mattis tortor ornare eget. Etiam non libero accumsan mi interdum bibendum id et metus. Nullam dolor risus, rhoncus ac pharetra eget, blandit vulputate neque." />
+
+
+    </android.support.v7.widget.CardView>
 
 
     <Button
@@ -61,64 +76,58 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:textAllCaps="true"
-        android:textColor="@color/accent"
+        android:textColor="@android:color/background_light"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="NAUCZONO 1/3" />
+        app:layout_constraintBottom_toBottomOf="@+id/btn_yes"
+        app:layout_constraintEnd_toStartOf="@+id/btn_yes"
+        app:layout_constraintStart_toEndOf="@+id/btn_no"
+        app:layout_constraintTop_toTopOf="@+id/btn_yes"
+        tools:text="1/3" />
 
     <ImageView
         android:id="@+id/questionMark"
-        android:layout_width="200dp"
-        android:layout_height="303dp"
+        android:layout_width="179dp"
+        android:layout_height="188dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/question_mark_desc"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/learnQuestion"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_question_mark" />
 
     <ImageView
         android:id="@+id/photoAnswer"
         android:layout_width="250dp"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="24dp"
         android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         android:visibility="gone"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/btn_yes"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/learnAnswer" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/learnAnswer" />
 
     <TextView
         android:id="@+id/learnAnswer"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:maxLines="20"
         android:scrollbars="vertical"
         android:textAlignment="center"
         android:textSize="12sp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/learnQuestion"
-        tools:text="Fusce lacinia odio ut mollis rhoncus. In eget mauris quis lorem iaculis feugiat nec ut orci. Ut tempus enim suscipit porta blandit. Mauris venenatis nisl dui, id efficitur erat feugiat vel. Phasellus convallis eget tortor eu vehicula. Pellentesque efficitur nisi id commodo lobortis. Sed sit amet gravida ante. In eget massa sit amet nisi venenatis laoreet quis ac mi. Aliquam erat volutpat. Nullam ornare, enim sed porttitor faucibus, ex augue auctor nulla, gravida dignissim elit tellus at diam. Phasellus et condimentum justo, vitae aliquet purus. Etiam at egestas sem. Nulla tincidunt tristique arcu ut tincidunt. Quisque quis lobortis justo.
-
-In sed imperdiet ipsum. Duis ex quam, lacinia at vehicula sit amet, interdum quis ante. Vestibulum non nunc neque. Etiam quis orci nec elit elementum accumsan. Nullam blandit finibus est sit amet ultricies. Duis dignissim odio dui, congue luctus sapien vehicula id. Etiam condimentum massa sed sapien mollis feugiat. Quisque consectetur, mi sit amet blandit suscipit, ante massa faucibus elit, ut consectetur erat ante sed metus. Aenean ullamcorper, purus et fringilla feugiat, sem lacus molestie nisi, a lacinia ex eros ac metus. Sed eget pretium nulla. Pellentesque justo diam, pulvinar id ornare ac, molestie eget risus.
-
-Sed eget consequat nisl. Quisque nec lectus dolor. Curabitur ac urna tortor. Curabitur eros quam, tincidunt vel libero et, dignissim luctus lorem. Morbi aliquet rutrum molestie. Morbi eleifend velit ut erat vehicula fringilla. Cras vitae varius urna, id volutpat elit. Duis vestibulum velit fermentum tortor sodales euismod. Suspendisse pellentesque odio sit amet accumsan hendrerit. Curabitur id diam vulputate, ornare tortor at, sagittis odio. Donec ac ipsum ut turpis egestas mollis quis nec purus.
-
-Nam sodales vel purus sit amet sagittis. Nullam lobortis neque enim, sit amet pretium purus volutpat eget. Suspendisse ultrices aliquam nibh, eget ultrices nisl interdum non. Suspendisse tellus arcu, mollis non arcu non, semper laoreet eros. Proin facilisis quam pharetra, aliquet odio sed, imperdiet magna. Duis a fringilla est. Pellentesque dapibus augue id leo gravida convallis. Proin fermentum eu urna ultricies dignissim." />
+        app:layout_constraintTop_toBottomOf="@id/cardView" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -9,7 +9,7 @@ interface ILearnView {
     fun updateStatus(status: String)
     fun learningDone()
     fun displayQuestion(question: Question)
-    fun showAnswer()
+    fun showAnswer(changeButtons: Boolean)
     fun hideAnswer()
 
 }

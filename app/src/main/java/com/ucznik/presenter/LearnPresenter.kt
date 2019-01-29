@@ -34,14 +34,14 @@ class LearnPresenter(val view: ILearnView,
     }
 
     private fun splitToLearned() {
-        questions.forEach({
+        questions.forEach {
             if (it.done == 1) questionsLearned.add(it)
-        })
+        }
         questions.removeAll(questionsLearned)
     }
 
     fun doNotKnowAnswer() {
-        view.showAnswer()
+        view.showAnswer(true)
     }
 
     fun knowAnswer(ok: String) {
@@ -65,11 +65,11 @@ class LearnPresenter(val view: ILearnView,
     }
 
     private fun updateQuestionDB(question: Question) {
-        AsyncTask.execute({
+        AsyncTask.execute {
             run {
                 AppDatabase.getInstance(context)!!.questionDAO().updateQuestion(question)
             }
-        })
+        }
     }
 
     companion object {

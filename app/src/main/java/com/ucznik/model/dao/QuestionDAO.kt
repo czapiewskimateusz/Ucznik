@@ -12,6 +12,9 @@ import com.ucznik.model.entities.Question
     @Query("select * from question where topicId = :topicId")
     fun getAllQuestions(topicId: Long): List<Question>
 
+    @Query("update question set done = 0 where topicId = :topicId")
+    fun resetAllQuestions(topicId: Long)
+
     @Query("select * from question where questionId = :id")
     fun findQuestionById(id: Long): Question
 

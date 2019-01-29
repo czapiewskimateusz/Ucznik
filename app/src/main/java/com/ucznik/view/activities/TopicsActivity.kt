@@ -39,15 +39,16 @@ class TopicsActivity : AppCompatActivity(), RenameDialog.RenameDialogListener, I
     }
 
     private fun initFAB() {
-        topicsFAB.setOnClickListener({
+        topicsFAB.setOnClickListener {
             val renameDialog = RenameDialog()
+            renameDialog.renameDialogListener = this
             renameDialog.show(this.fragmentManager, "rename_dialog")
-        })
+        }
     }
 
     private fun initRV() {
         topicsRV.layoutManager = GridLayoutManager(this, 2)
-        topicsRV.setHasFixedSize(true)
+        //topicsRV.setHasFixedSize(true)
         topicsRV.adapter = topicPresenter.topicsAdapter
         addOnScrollListener()
     }

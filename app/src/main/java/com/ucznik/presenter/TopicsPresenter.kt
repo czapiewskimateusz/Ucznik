@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.support.v4.app.FragmentActivity
+import android.util.Log
 import com.ucznik.model.AppDatabase
 import com.ucznik.model.entities.Topic
 import com.ucznik.presenter.adapters.TopicsAdapter
@@ -55,6 +56,7 @@ class TopicsPresenter(val view: ITopicsView,
         val renameDialog = RenameDialog()
         renameDialog.currName = topics[position].name
         renameDialog.position = position
+        if (context is RenameDialog.RenameDialogListener) renameDialog.renameDialogListener = context
         renameDialog.show(activity.fragmentManager, "rename_dialog")
     }
 
@@ -69,7 +71,9 @@ class TopicsPresenter(val view: ITopicsView,
 
     private fun addNewTopic(topicName: String) {
         val newTopic = Topic(name = topicName, done = 0)
-        insertTopicDB(newTopic,topics,topicsAdapter)
+        topics.add(newTopic)
+        topicsAdapter.notifyItemInserted(topics.size - 1)
+        insertTopicDB(newTopic, topics)
     }
 
     override fun deleteTopic(position: Int) {
@@ -87,25 +91,25 @@ class TopicsPresenter(val view: ITopicsView,
     }
 
     private fun updateTopicDB(topic: Topic) {
-        AsyncTask.execute({
+        AsyncTask.execute {
             run { AppDatabase.getInstance(context)!!.topicDAO().updateTopic(topic) }
-        })
+        }
     }
 
-    private fun insertTopicDB(newTopic: Topic, topics: ArrayList<Topic>, topicsAdapter: TopicsAdapter) {
-        AsyncTask.execute({
+    private fun insertTopicDB(newTopic: Topic, topics: ArrayList<Topic>) {
+        AsyncTask.execute {
             run {
                 newTopic.topicId = AppDatabase.getInstance(context)!!.topicDAO().insertTopic(newTopic)
-                topics.add(newTopic)
-                topicsAdapter.notifyItemInserted(topics.size - 1)
+                val topic = topics.find { it.name == newTopic.name }
+                topic?.topicId = newTopic.topicId
             }
-        })
+        }
     }
 
     private fun deleteTopicDB(deletedTopic: Topic) {
-        AsyncTask.execute({
+        AsyncTask.execute {
             run { AppDatabase.getInstance(context)!!.topicDAO().deleteTopic(deletedTopic) }
-        })
+        }
     }
 
     companion object {

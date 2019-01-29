@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
@@ -49,13 +48,21 @@ class QuestionsActivity : AppCompatActivity(), IQuestionsView, QuestionEditDialo
         val searchItem = menu?.findItem(R.id.search_question_menu)
         val searchView = searchItem?.actionView as SearchView
         initSearchMenu(searchView)
-        val leanItem = menu.findItem(R.id.learn_menu)
-        initLearnMenu(leanItem)
+        val learnItem = menu.findItem(R.id.learn_menu)
+        initLearnMenu(learnItem)
+        val resetMenu = menu.findItem(R.id.reset_menu)
+        initResetMenu(resetMenu)
         return true
     }
 
-    private fun initLearnMenu(leanItem: MenuItem) {
-        leanItem.setOnMenuItemClickListener {
+    private fun initResetMenu(resetMenu: MenuItem) {
+        resetMenu.setOnMenuItemClickListener {
+            questionPresenter.resetQuestions()
+        }
+    }
+
+    private fun initLearnMenu(learnItem: MenuItem) {
+        learnItem.setOnMenuItemClickListener {
             questionPresenter.startLearning()
         }
     }

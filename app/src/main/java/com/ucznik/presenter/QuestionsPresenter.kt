@@ -17,7 +17,6 @@ import com.ucznik.view.dialogs.QuestionEditDialog
 import com.ucznik.view.interfaces.IQuestionsView
 import android.content.ContextWrapper
 import android.net.Uri
-import android.support.v4.content.ContextCompat
 import android.util.Log
 import java.io.File
 import java.io.FileOutputStream
@@ -43,10 +42,10 @@ class QuestionsPresenter(val view: IQuestionsView,
         questions.forEach { q -> if (q.done == 1) done++ }
         if (done == questions.size.toDouble() && questions.size > 0) markTopicDoneDB()
         else markTopicUnDoneDB()
-        checkPercentage(done)
+        updatePercentage(done)
     }
 
-    private fun checkPercentage(done: Double) {
+    private fun updatePercentage(done: Double) {
         val percentage: Double = (done / questions.size) * 100
         view.updateQuestionStatus(String.format("%.2f", percentage) + "%")
         when {
@@ -62,9 +61,9 @@ class QuestionsPresenter(val view: IQuestionsView,
     }
 
     private fun getQuestionById(id: Long): Question? {
-        questions.forEach({
+        questions.forEach {
             if (it.questionId == id) return it
-        })
+        }
         return null
     }
 
@@ -83,6 +82,9 @@ class QuestionsPresenter(val view: IQuestionsView,
     }
 
     fun updateQuestionDB(questionEditDialog: QuestionEditDialog) {
+        if (questionEditDialog.answer != null && questionEditDialog.answer!!.isNotEmpty()) {
+            questionEditDialog.answer = questionEditDialog.answer!!.replace(System.lineSeparator(), "")
+        }
         if (questionEditDialog.oldQuestion == null) addNewQuestion(questionEditDialog)
         else {
             questions.forEach(action = { question ->
@@ -110,7 +112,7 @@ class QuestionsPresenter(val view: IQuestionsView,
         try {
             val file = File(question.image)
             file.delete()
-            Log.d("DELETED IMAGE:",question.image)
+            Log.d("DELETED IMAGE:", question.image)
         } catch (e: NullPointerException) {
         }
         question.image = null
@@ -139,14 +141,14 @@ class QuestionsPresenter(val view: IQuestionsView,
         if (bitmap == null) return null
         val file = initFile()
         return try {
-            compress(file!!, bitmap)
+            compress(file, bitmap)
         } catch (e: IOException) {
             e.printStackTrace()
             null
         }
     }
 
-    private fun initFile(): File? {
+    private fun initFile(): File {
         val wrapper = ContextWrapper(context)
         var file = wrapper.getDir("Images", MODE_PRIVATE)
         val c = Calendar.getInstance()
@@ -181,10 +183,10 @@ class QuestionsPresenter(val view: IQuestionsView,
 
     private fun showSnackBar(question: Question, position: Int) {
         var remove = true
-        val snackbar = Snackbar.make(activity.currentFocus, question.question, Snackbar.LENGTH_LONG).setAction(context.getString(R.string.cancel), {
+        val snackbar = Snackbar.make(activity.currentFocus, question.question, Snackbar.LENGTH_LONG).setAction(context.getString(R.string.cancel)) {
             recoverQuestion(question, position)
             remove = false
-        })
+        }
         snackbar.addCallback(object : Snackbar.Callback() {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 if (remove) deleteImage(question)
@@ -222,50 +224,61 @@ class QuestionsPresenter(val view: IQuestionsView,
     }
 
     private fun allLearned(): Boolean {
-        questions.forEach({
+        questions.forEach {
             if (it.done == 0) return false
-        })
+        }
         return true
     }
 
     private fun updateQuestionDB(question: Question) {
-        AsyncTask.execute({
+        AsyncTask.execute {
             run {
                 AppDatabase.getInstance(context)!!.questionDAO().updateQuestion(question)
             }
-        })
+        }
     }
 
     private fun insertQuestionDB(question: Question) {
-        AsyncTask.execute({
+        AsyncTask.execute {
             run {
                 AppDatabase.getInstance(context)!!.questionDAO().insertQuestion(question)
             }
-        })
+        }
     }
 
     private fun deleteQuestionDB(question: Question) {
-        AsyncTask.execute({
+        AsyncTask.execute {
             run {
                 AppDatabase.getInstance(context)!!.questionDAO().deleteQuestion(question)
             }
-        })
+        }
     }
 
     private fun markTopicDoneDB() {
-        AsyncTask.execute({
+        AsyncTask.execute {
             run {
                 AppDatabase.getInstance(context)!!.topicDAO().markDone(topicId!!)
             }
-        })
+        }
     }
 
     private fun markTopicUnDoneDB() {
-        AsyncTask.execute({
+        AsyncTask.execute {
             run {
                 AppDatabase.getInstance(context)!!.topicDAO().markUnDone(topicId!!)
             }
-        })
+        }
+    }
+
+    fun resetQuestions(): Boolean {
+        questions.forEach { question: Question -> question.done = 0 }
+        questionsAdapter.notifyDataSetChanged()
+        updatePercentage(0.0)
+        AsyncTask.execute {
+            AppDatabase.getInstance(context)!!.questionDAO().resetAllQuestions(topicId!!)
+            AppDatabase.getInstance(context)!!.topicDAO().markUnDone(topicId!!)
+        }
+        return true
     }
 
     companion object {

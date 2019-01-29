@@ -42,4 +42,5 @@
     <string name="already_learned">Nie ma niczego do nauki!</string>
     <string name="question_mark_desc">Znak zapytania</string>
     <string name="photo_answer_desc">odpowiedź w formie zdjęcia</string>
+    <string name="reset_menu">reset</string>
 </resources>

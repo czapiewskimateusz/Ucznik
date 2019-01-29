@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.dialog_topic_rename.view.*
  */
 class RenameDialog: DialogFragment() {
 
-    private var renameDialogListener: RenameDialogListener? = null
+    var renameDialogListener: RenameDialogListener? = null
     var newName: String? = null
     var currName: String? = null
     var position: Int? = null

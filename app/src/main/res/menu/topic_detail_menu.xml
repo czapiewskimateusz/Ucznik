@@ -3,6 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/reset_menu"
+        android:checkable="false"
+        android:enabled="true"
+        android:title="@string/reset_menu"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/learn_menu"
         android:checkable="false"
         android:enabled="true"
